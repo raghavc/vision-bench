@@ -162,3 +162,29 @@ After the fixes, 7 items remain flagged. They are either verified shared misconc
 - **Visible reasoning only.** The critic sees visible reasoning and provider summaries, never a raw chain of thought.
 - **Inconclusive caption control.** The caption-only control ran on only 21 items for Gemini and 2 for Terra before its budget cap, so no conclusion is drawn from it.
 - **Not yet run:** the agentic (zoom) mode was not exercised on OpenRouter, and there is no human baseline yet (`visionbench human-form` is ready).
+
+## 11. Addendum: why high single-item accuracy doesn't carry over to long tasks
+
+This analysis was run after the report, on the same data, with no new API calls.
+
+**By task type** (sample 0, vision):
+
+| Model | Fully specified, short chain | Rule induction / 3-D (grid_rules, cube_folding) | Find-what-matters / long tracking (visual_search, maze_path, wire_tracing) |
+|---|---|---|---|
+| Gemini-4-Argon | 100% | 85% | 63% |
+| GPT-6.1-Terra | 100% | 75% | 63% |
+| Claude Haiku 5.5 | 96% | 65% | 47% |
+| GPT-6-Luna | 96% | 70% | 27% |
+| Qwen3.8-Flash | 97% | 22% | 30% |
+
+"Fully specified, short chain" covers charts, graphs, lattice geometry, receipts, counting, gears and perspective.
+
+**Compounding.** A synthetic long task chains k items, each from a different family, and counts as solved only if every step is correct. Item outcomes are resampled within each family, steps are treated as independent, and each figure uses 4,000 draws.
+
+| Steps (k) | Gemini | Terra | Haiku | Luna | Qwen |
+|---|---|---|---|---|---|
+| 1 | 88% | 87% | 78% | 71% | 69% |
+| 5 | 53% | 47% | 25% | 16% | 13% |
+| 15 | 10% | 6% | 1% | 0% | 0% |
+
+The k = 15 figure falls below the uniform-difficulty estimate (0.88¹⁵ ≈ 15%) because the hard families dominate the product. Real tasks propagate early errors, so these numbers are optimistic. This is the main reason strong single-item scores sit alongside low success on long, multi-criterion tasks (APEX averages about 15 rubric criteria per task).
