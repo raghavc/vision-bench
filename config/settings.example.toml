@@ -44,6 +44,7 @@ max_tokens = 16000
 samples = 3              # independent judge samples, majority vote per rubric item
 fallbacks = true         # a fallback judge is fine: it doesn't change what is being measured
 show_image = true        # judges see the image as well as the reference facts
+rubric_show_image = false  # rubric criteria are graded against generator facts; set true to also send the image
 
 # ---------------------------------------------------------------------------
 # Harness

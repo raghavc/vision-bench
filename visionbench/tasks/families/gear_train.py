@@ -102,7 +102,8 @@ class GearTrain(TaskFamily):
             "answer": AnswerSpec(
                 kind="custom",
                 value={"direction": truth["direction"], "rpm": float(truth["rpm"])},
-                format_hint="direction then rpm, e.g. 'clockwise 22.5', or 'stationary' if it does not turn",
+                format_hint=("direction then rpm (exact fraction or at least 2 decimals), e.g. 'clockwise 22.5' "
+                             "or 'counterclockwise 128/3', or 'stationary' if it does not turn"),
             ),
             "images": [img],
             "facts": {
@@ -272,9 +273,19 @@ class GearTrain(TaskFamily):
             direction = "clockwise" if tok in ("clockwise", "cw") else "counterclockwise"
         rpm = parse_number(text)
         dir_ok = direction == truth["direction"]
-        rpm_ok = rpm is not None and math.isclose(rpm, truth["rpm"], rel_tol=1e-3, abs_tol=0.01)
+        # exact (fractions allowed) or correctly rounded to the precision the answer states (>= 1 decimal)
+        rpm_ok = rpm is not None and (math.isclose(rpm, truth["rpm"], rel_tol=1e-3, abs_tol=0.01)
+                                      or _rounds_to(truth["rpm"], text))
         return float(dir_ok and rpm_ok), {"direction": direction, "rpm": rpm,
                                           "direction_ok": dir_ok, "rpm_ok": rpm_ok}
+
+
+def _rounds_to(truth: float, text: str) -> bool:
+    m = re.search(r"(-?\d+)\.(\d+)", text.replace(",", ""))
+    if not m:
+        return False
+    decimals = len(m.group(2))
+    return abs(float(m.group(0)) - truth) <= 0.5 * 10 ** -decimals + 1e-9
 
 
 def parse_number(text: str) -> float | None:

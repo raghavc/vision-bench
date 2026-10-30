@@ -363,6 +363,18 @@ def render(results: dict[str, Any], out_path: Path, title: str = "VisionBench re
             h.append(f"<tr><td><code>{b['uid']}</code></td><td></td><td>IRT suspect key</td>"
                      f"<td class='num'>{pct(b['max_other_acc'])}</td></tr>")
         h.append("</table>")
+    cw = results.get("consensus_wrong_items") or []
+    h.append(f"<h3>Cross-vendor consensus on a wrong answer</h3><p class='sub'>{len(cw)} items where models from two or more "
+             "different vendors gave the <em>identical</em> wrong answer. Independent agreement against the key is the "
+             "strongest automatic signal of an ambiguous item or a bad key. Each one should be reviewed by a person.</p>")
+    if cw:
+        h.append("<table><tr><th>uid</th><th>family</th><th class='num'>L</th><th>vendors</th><th>shared answer</th>"
+                 "<th>key</th></tr>")
+        for c in cw[:30]:
+            h.append(f"<tr><td><code>{c['uid']}</code></td><td>{esc(c['family'])}</td><td class='num'>{c['difficulty']}</td>"
+                     f"<td>{esc(', '.join(c['vendors']))}</td><td><code>{esc(c['shared_wrong_answer'][:70])}</code></td>"
+                     f"<td><code>{esc(c['key'][:70])}</code></td></tr>")
+        h.append("</table>")
     fd = results.get("irt", {}).get("family_mean_difficulty")
     if fd:
         h.append("<h3>Family difficulty (Rasch b, higher = harder)</h3><table><tr><th>family</th><th class='num'>b</th></tr>")

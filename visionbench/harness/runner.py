@@ -191,6 +191,7 @@ class Run:
         if needs_judge:
             try:
                 judges = Judges(self.claude, self.settings)
+                judges.cost_log = self.run_dir / "judge_costs.jsonl"
             except RuntimeError as e:  # no API key: rubric items stay unverified until one is configured
                 print(f"[verify] judges unavailable ({e}); skipping rubric-graded items", file=sys.stderr)
                 todo = [a for a in todo if items[a.uid].answer.kind != "rubric"]
@@ -261,6 +262,7 @@ class Run:
         if limit:
             todo = todo[:limit]
         judges = Judges(self.claude, self.settings)
+        judges.cost_log = self.run_dir / "judge_costs.jsonl"
         gate = RateGate(int(self.settings.run.get("concurrency", 8)))
         if progress:
             print(f"[critique] {len(todo)} attempts to critique", file=sys.stderr)

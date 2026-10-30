@@ -10,7 +10,7 @@ The design comes from a survey of frontier multimodal benchmarks and eval vendor
 | Multiple-choice guessing floor and saturation | VisuLogic's 25% floor; BLINK and MMVP | Procedural tasks are **free-form**, with typed answers (integer, grid, path, set, mapping). MC external sets report **chance-normalized** accuracy. |
 | Wrong answer keys | HLE: 18–29% flawed; FrontierMath: about 1/3 | Ground truth is **computed by the generator** (a solver, simulator or Dijkstra), never hand-typed. IRT flags suspect keys in external sets. |
 | Contamination of static public sets | Saturation within 12–24 months | Generators are **seeded and parameterized**: unlimited fresh items, plus an HMAC-seeded **private test split**. Rotating the secret gives a new test set. |
-| Ambiguous items | Too-close-to-call layouts | Each family has an **ambiguity filter**: uniqueness proof for ARC rules, legibility checks for wires, angular margins for perspective, centre-of-mass margins for statics, no ties in chart argmaxes. |
+| Ambiguous items | Too-close-to-call layouts, rules with several plausible readings | Each family has an **ambiguity filter**: uniqueness proof for ARC rules (including shadow alternative readings), legibility checks for wires, angular margins for perspective, centre-of-mass margins for statics, no ties in chart argmaxes. |
 | LLM judges are noisy and lenient | VBVR-Pro (5–93% score flips); MAM-AI | Programmatic verification wherever possible. Judges only grade rubric items, which are atomic, binary, reference-guided, one criterion per call, k-sample majority vote and critical-gated. A **judge audit** reports agreement, κ and false-accept rate against programmatic truth. |
 | No error bars, pooled samples | Miller (2024), "Adding Error Bars to Evals" | Samples are averaged per item first. **Cluster-robust SEs** and cluster bootstrap CIs. Paired model differences with permutation p-values and Holm correction. Rank intervals. MDE. |
 | Lucky single samples | ZeroBench pass@5 vs pass^5 | k samples per item, with unbiased **pass@k** and **pass^k** (all-k-correct reliability). |
@@ -156,6 +156,6 @@ The verifiers are applied in order of trust:
 ## 6. Known limitations
 
 - Synthetic renders differ from natural images. Check the correlation between procedural families and the external real-image sets before generalizing.
-- `grid_rules` uniqueness is relative to the DSL. A human might infer a rule outside the DSL; the examples are chosen so that every DSL primitive is necessary.
+- `grid_rules` uniqueness is relative to the DSL plus its shadow rules (alternative readings). A rule outside both sets could still be inferred; the cross-vendor consensus audit exists to catch such cases.
 - Judge-graded tracks (`chart_insight`, HSS) inherit judge error. Read their scores alongside the judge audit.
 - Cost estimates use output-token priors until a pilot run measures them.

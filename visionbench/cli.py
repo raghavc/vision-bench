@@ -82,6 +82,7 @@ def _settings_with_cli(args, settings):
         "subject": {"effort": args.effort, "max_tokens": args.max_tokens},
         "harness": {"mode": args.mode, "max_turns": args.max_turns, "code_execution": args.code_execution or None},
         "run": {"concurrency": args.concurrency, "process_judge": args.process_judge or None},
+        "openrouter": {"budget_usd": args.budget},
     })
 
 
@@ -99,10 +100,12 @@ def cmd_run(args, settings):
               samples=samples, families=args.families.split(",") if args.families else None, limit=args.limit,
               per_family=args.per_family)
     print(f"[run] -> {run_dir}", file=sys.stderr)
-    asyncio.run(run.collect())
-    asyncio.run(run.verify())
-    if args.critique:
-        asyncio.run(run.critique())
+    async def stages():  # one event loop for every stage: HTTP clients are bound to the loop that created them
+        await run.collect()
+        await run.verify()
+        if args.critique:
+            await run.critique()
+    asyncio.run(stages())
     _report(run_dir, settings)
 
 
@@ -271,6 +274,7 @@ def main(argv=None):
             p.add_argument("--code-execution", action="store_true")
             p.add_argument("--process-judge", action="store_true")
             p.add_argument("--critique", action="store_true", help="also run the reasoning critique (sample 0 per item)")
+            p.add_argument("--budget", type=float, default=None, help="OpenRouter USD cap for this invocation")
         p.set_defaults(fn=fn)
 
     p = sub.add_parser("verify")

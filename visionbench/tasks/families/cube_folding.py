@@ -36,7 +36,9 @@ NETS = [
 ]
 
 FACE_COLORS = ["red", "blue", "green", "yellow", "purple", "orange"]
-LETTERS = ["F", "G", "J", "L", "P", "Q", "R", "4", "7"]  # no mirror symmetry: chirality stays visible
+# No mirror symmetry (chirality stays visible) and no two glyphs alike under rotation ("7" was dropped
+# in v2: rotated 180 degrees it reads as an "L").
+LETTERS = ["F", "G", "J", "L", "P", "Q", "R", "4"]
 
 DIR_VEC = {(0, 1): np.array([1, 0, 0]), (0, -1): np.array([-1, 0, 0]),
            (1, 0): np.array([0, -1, 0]), (-1, 0): np.array([0, 1, 0])}
@@ -100,6 +102,7 @@ GLYPHS = [0, 0, 0, 1, 1, 1]
 @register
 class CubeFolding(TaskFamily):
     name = "cube_folding"
+    version = "2"
     description = "Fold a cube net mentally; reason about hidden faces and rotations (chirality-correct)."
     skills = ["spatial_3d", "mental_rotation"]
 

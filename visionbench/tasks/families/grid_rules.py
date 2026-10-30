@@ -164,12 +164,109 @@ def make_rays(direction: str) -> Callable[[Grid], Grid]:
     return f
 
 
+# ------------------------------------------------------------- shadow rules
+# Plausible alternative readings of the primitives above (8-connectivity instead of 4, per-object
+# outlines, different tie-breaks, mirroring from the other half). They are never used to *generate*
+# puzzles, but they take part in the uniqueness check, so a puzzle is rejected whenever a natural
+# alternative interpretation would predict a different answer. Added after a live run where four
+# models from three vendors agreed on the per-object reading of `outline`.
+def _components8(g: Grid):
+    return ndimage.label(g > 0, structure=np.ones((3, 3), int))
+
+
+def outline_per_object(g):
+    pad = np.pad(g, 1)
+    c = pad[1:-1, 1:-1]
+    interior = (c > 0) & (pad[:-2, 1:-1] == c) & (pad[2:, 1:-1] == c) & (pad[1:-1, :-2] == c) & (pad[1:-1, 2:] == c)
+    out = g.copy()
+    out[interior] = 0
+    return out
+
+
+def largest_only_8(g):
+    lab, n = _components8(g)
+    if n == 0:
+        return g.copy()
+    sizes = ndimage.sum(np.ones_like(g), lab, range(1, n + 1))
+    return np.where(lab == int(np.argmax(sizes)) + 1, g, 0)
+
+
+def recolor_by_size_8(g):
+    lab, n = _components8(g)
+    out = g.copy()
+    for i in range(1, n + 1):
+        out[lab == i] = min(9, int((lab == i).sum()))
+    return out
+
+
+def swap_top2_alt(g):
+    vals, counts = np.unique(g[g > 0], return_counts=True)
+    if len(vals) < 2:
+        return g.copy()
+    order = np.lexsort((-vals, -counts))  # ties broken toward the larger colour value
+    a, b = vals[order[0]], vals[order[1]]
+    out = g.copy()
+    out[g == a], out[g == b] = b, a
+    return out
+
+
+def mirror_from_right(g):
+    out = g.copy()
+    w = g.shape[1]
+    out[:, : w // 2] = g[:, w - w // 2:][:, ::-1]
+    return out
+
+
+def make_rays8(direction: str) -> Callable[[Grid], Grid]:
+    base = make_rays(direction)
+
+    def f(g):
+        lab, n = _components8(g)
+        out = g.copy()
+        singles = {tuple(np.argwhere(lab == i)[0]) for i in range(1, n + 1) if (lab == i).sum() == 1}
+        ray = base(g)
+        # keep only rays that start from pixels isolated under 8-connectivity
+        lab4, n4 = _components(g)
+        for i in range(1, n4 + 1):
+            cells = np.argwhere(lab4 == i)
+            if len(cells) == 1 and tuple(cells[0]) in singles:
+                r, c = cells[0]
+                mask = np.zeros_like(g, bool)
+                if direction in ("right", "left"):
+                    mask[r, :] = True
+                else:
+                    mask[:, c] = True
+                out[mask & (g == 0)] = ray[mask & (g == 0)]
+        return out
+    f.__name__ = f"rays8_{direction}"
+    return f
+
+
+def make_fill_enclosed8(color: int) -> Callable[[Grid], Grid]:
+    def f(g):
+        lab, n = ndimage.label(g == 0, structure=np.ones((3, 3), int))
+        border = set(np.unique(np.concatenate([lab[0], lab[-1], lab[:, 0], lab[:, -1]])))
+        out = g.copy()
+        for i in range(1, n + 1):
+            if i not in border:
+                out[lab == i] = color
+        return out
+    f.__name__ = f"fill_enclosed8_{color}"
+    return f
+
+
 PRIMITIVES: dict[str, Callable[[Grid], Grid]] = {
     f.__name__: f for f in [flip_h, flip_v, rot90, rot180, transpose, gravity_down, gravity_left, outline,
                             largest_only, recolor_by_size, swap_top2, mirror_lr, crop_bbox, scale2]
 }
 PRIMITIVES.update({f.__name__: f for f in [make_fill_enclosed(c) for c in (2, 3, 4, 6, 8)]})
 PRIMITIVES.update({f.__name__: f for f in [make_rays(d) for d in ("right", "left", "down", "up")]})
+
+SHADOWS: dict[str, Callable[[Grid], Grid]] = {
+    f.__name__: f for f in [outline_per_object, largest_only_8, recolor_by_size_8, swap_top2_alt, mirror_from_right]
+}
+SHADOWS.update({f.__name__: f for f in [make_rays8(d) for d in ("right", "left", "down", "up")]})
+SHADOWS.update({f.__name__: f for f in [make_fill_enclosed8(c) for c in (2, 3, 4, 6, 8)]})
 
 DESCRIPTIONS = {
     "flip_h": "mirror left-right", "flip_v": "mirror top-bottom", "rot90": "rotate 90° clockwise",
@@ -192,6 +289,7 @@ SIZE_RANGE = [(0, 0), (5, 7), (6, 9), (6, 9), (7, 10), (7, 11)]
 @register
 class GridRules(TaskFamily):
     name = "grid_rules"
+    version = "2"  # v2: shadow-rule uniqueness, example-only identifiability
     description = "Induce a hidden grid transformation from image-only examples (uniqueness-checked)."
     skills = ["abstract_reasoning", "rule_induction", "perception"]
 
@@ -213,7 +311,7 @@ class GridRules(TaskFamily):
             if any(y.size == 0 or max(y.shape) > 16 for y in outputs):
                 continue
             # no step of the program may be a no-op on all inputs (then it isn't identifiable)
-            if any(all(np.array_equal(run(prog[:k], x), run(prog[:k + 1], x)) for x in inputs)
+            if any(all(np.array_equal(run(prog[:k], x), run(prog[:k + 1], x)) for x in inputs[:-1])
                    for k in range(depth)):
                 continue
             ok, n_consistent = unique_prediction(inputs[:-1], outputs[:-1], inputs[-1], depth)
@@ -334,7 +432,7 @@ def unique_prediction(xs, ys, test_x, depth) -> tuple[bool, int]:
     for _ in range(depth):
         nxt = {}
         for state in frontier.values():
-            for f in PRIMITIVES.values():
+            for f in list(PRIMITIVES.values()) + list(SHADOWS.values()):
                 try:
                     new = [f(g) for g in state]
                 except Exception:

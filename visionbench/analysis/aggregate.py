@@ -146,6 +146,7 @@ def aggregate(run_dir: Path, settings: Settings) -> dict[str, Any]:
     out["blind_solvable_items"] = sorted(
         [{"uid": u, "family": items[u].family, "blind_acc": m} for u, (m, _, _) in blind_item.items() if m >= 0.5],
         key=lambda d: -d["blind_acc"])[:50]
+    out["consensus_wrong_items"] = consensus_wrong(run_dir, items)
     out["families"] = sorted({r.family for r in rows})
     from visionbench.analysis.reasoning_profile import profiles
     out["reasoning"] = profiles(run_dir)
@@ -164,3 +165,34 @@ def _item_table(rows, items) -> list[dict[str, Any]]:
                       "answer": it.answer.value if it.answer.kind != "rubric" else "(rubric)",
                       "scores": {k: float(np.mean(v)) for k, v in d.items()}})
     return sorted(table, key=lambda t: (t["family"], t["difficulty"], t["uid"]))
+
+
+def _vendor(model: str) -> str:
+    m = model.removeprefix("or:")
+    return m.split("/")[0] if "/" in m else ("anthropic" if m.startswith("claude") else m.split(":")[0])
+
+
+def consensus_wrong(run_dir: Path, items: dict[str, TaskInstance]) -> list[dict[str, Any]]:
+    """Items where subjects from >= 2 different vendors give the *identical* wrong answer.
+
+    Independent models converging on the same wrong answer is the strongest automatic signal of an
+    ambiguous item or a bad key (it is how the v1 grid_rules `outline` ambiguity was found).
+    """
+    verdicts = {v["attempt_key"]: v for v in _jsonl(run_dir / "verdicts.jsonl")}
+    groups: dict[tuple[str, str], set[str]] = defaultdict(set)
+    models: dict[tuple[str, str], set[str]] = defaultdict(set)
+    for key, v in verdicts.items():
+        model, _mode, cond, uid, _k = key.split("|")
+        if cond != "vision" or v["outcome"] != "incorrect" or v.get("parsed") is None or uid not in items:
+            continue
+        sig = json.dumps(v["parsed"], sort_keys=True, default=str)
+        groups[(uid, sig)].add(_vendor(model))
+        models[(uid, sig)].add(model)
+    out = []
+    for (uid, sig), vendors in groups.items():
+        if len(vendors) >= 2:
+            it = items[uid]
+            out.append({"uid": uid, "family": it.family, "difficulty": it.difficulty, "shared_wrong_answer": sig[:200],
+                        "key": json.dumps(it.answer.value, default=str)[:200], "vendors": sorted(vendors),
+                        "models": sorted(models[(uid, sig)])})
+    return sorted(out, key=lambda d: -len(d["vendors"]))

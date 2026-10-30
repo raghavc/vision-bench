@@ -64,7 +64,7 @@ Each generator is responsible for proving its own item is **answerable, unambigu
 
 | Family | Validity mechanism |
 |---|---|
-| `grid_rules` | Breadth-first enumeration of every DSL program up to the item's depth, deduplicating intermediate states. The item is rejected unless *all* programs consistent with the examples predict the same test output. Every step of the hidden program must change at least one grid, so no step is invisible. |
+| `grid_rules` | Breadth-first enumeration of every program up to the item's depth, deduplicating intermediate states. The search covers the 23 generating primitives **plus 14 shadow rules**: plausible alternative readings (8-connectivity, per-object outlines, alternative tie-breaks, mirroring from the other half) that are never used to generate. The item is rejected unless *every* consistent program predicts the same test output. Each step of the hidden program must change at least one *example*, so no step can only be seen on the test grid. |
 | `wire_tracing` | Rejects layouts where two curves stay within 5 px of each other for more than 8 consecutive samples (shallow-angle overlaps a human couldn't resolve). Draw order is randomized, so the wire on top isn't a cue. |
 | `gear_train` | Non-adjacent gears must clear each other by at least 28 px, so accidental meshes can't happen. Belts are rejected if a tangent passes within 14 px of another gear. Decoy gears sit 16–26 px from their neighbour, a clearly visible gap. Teeth are phase-aligned so meshes look physically right. |
 | `perspective_taking` | Objects within 15° of a decision boundary that matters for the question are excluded: the forward axis for left/right questions, the lateral axis for front/behind. |
@@ -289,7 +289,13 @@ For agentic runs, `crop_grounding` adds a **deterministic** grounding measure: t
 - **head-to-head** analysis: on items where A is right and B is wrong, the distribution of B's first errors, and vice versa;
 - example critique cards with item thumbnails.
 
-### 3.6 Statistics (`analysis/stats.py`)
+### 3.6 Self-audit of items: cross-vendor consensus
+
+`aggregate.consensus_wrong` flags every item where models from **two or more different vendors give the identical wrong parsed answer**. Independent systems converging on the same "wrong" answer is the strongest automatic evidence that the key or the item is at fault rather than the models. The report lists these items for human review next to the IRT suspect keys and the blind-solvable items.
+
+In the first live run this check found a real ambiguity. In `grid_rules` v1, the `outline` primitive hollowed out touching objects of *different* colours as one mass, and models from three vendors agreed on the per-object reading. The fix is the shadow-rule mechanism in §1.2, released as `grid_rules` v2.
+
+### 3.7 Statistics (`analysis/stats.py`)
 
 Statistics follow Miller (2024), "Adding Error Bars to Evals", and later practice:
 
@@ -310,7 +316,7 @@ Statistics follow Miller (2024), "Adding Error Bars to Evals", and later practic
    - **suspect keys:** the strongest subject fails every sample while others pass at least half the time;
    - **blind-solvable items:** blind accuracy of at least 50%.
 
-### 3.7 Report
+### 3.8 Report
 
 `analysis/report.py` writes a single self-contained HTML file: inline SVG, no external assets, light and dark themes. It covers:
 - leaderboard with confidence intervals;

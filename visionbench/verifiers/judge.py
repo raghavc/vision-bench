@@ -184,8 +184,11 @@ class Judges:
         self.samples = int(j.get("samples", 3))
         self.fallbacks = bool(j.get("fallbacks", True))
         self.show_image = bool(j.get("show_image", True))
+        # rubric criteria are graded against generator facts; the image is optional there (cost lever)
+        self.rubric_show_image = bool(j.get("rubric_show_image", self.show_image))
         self.max_side = int(settings.harness.get("max_image_side", 1568))
         self.usage = Usage()
+        self.cost_log = None  # path; set by the runner so judge spend is auditable
 
     async def _call(self, system: str, content: list[dict[str, Any]], schema: dict[str, Any]) -> dict[str, Any]:
         res = await self.claude.create(
@@ -194,6 +197,10 @@ class Judges:
             thinking_display="omitted",
         )
         self.usage.add(res.usage)
+        if self.cost_log:
+            with open(self.cost_log, "a") as f:
+                f.write(json.dumps({"model": self.model, "cost_usd": res.usage.cost_usd, "in": res.usage.input_tokens,
+                                    "out": res.usage.output_tokens, "schema": next(iter(schema.get("properties", {})), "")}) + "\n")
         if res.stop_reason == "refusal":
             return {"_refusal": res.refusal_category}
         try:
@@ -203,7 +210,7 @@ class Judges:
 
     # ------------------------------------------------------------- rubric
     async def grade_rubric(self, instance: TaskInstance, response: str) -> dict[str, Any]:
-        imgs = _image_blocks(instance, self.show_image, self.max_side)
+        imgs = _image_blocks(instance, self.rubric_show_image, self.max_side)
         facts = json.dumps(instance.facts, default=str, indent=1)
 
         async def one(item: RubricItem) -> dict[str, Any]:
