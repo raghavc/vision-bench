@@ -21,6 +21,11 @@ from __future__ import annotations
 from typing import Any
 
 
+PERCEPTUAL = {"perception_misread", "perception_omission", "hallucination", "attribute_binding", "tracking",
+              "counting_enumeration"}
+REASONING = {"spatial_transform", "arithmetic", "rule_misapplication", "premature_commitment"}
+
+
 def derive(j: dict[str, Any], n_key_facts: int, outcome: str) -> dict[str, Any]:
     obs = j.get("observations") or []
     n_ok = sum(o.get("verdict") == "correct" for o in obs)
@@ -32,17 +37,21 @@ def derive(j: dict[str, Any], n_key_facts: int, outcome: str) -> dict[str, Any]:
     correct = outcome == "correct"
     valid = bool(j.get("reasoning_valid"))
     supported = bool(j.get("answer_supported"))
+    # Locus comes from the critic's FIRST error. Key-fact misreads are only a fallback: key facts include
+    # derived conclusions (e.g. the final gear direction), so any wrong answer would otherwise look perceptual.
+    et = j.get("error_type") or "none"
     if correct:
         locus = None
-    elif stated_bad > 0 or j.get("error_type", "").startswith(("perception", "hallucination", "tracking",
-                                                                "attribute_binding", "counting")):
-        locus = "perception"
-    elif j.get("error_type") in ("instruction_misread",):
-        locus = "instruction"
-    elif j.get("error_type") in ("gave_up",) or outcome in ("unparseable", "refusal", "error"):
+    elif outcome in ("unparseable", "refusal", "error") or et == "gave_up":
         locus = "no_answer"
-    else:
+    elif et in PERCEPTUAL:
+        locus = "perception"
+    elif et in REASONING:
         locus = "reasoning"
+    elif et == "instruction_misread":
+        locus = "instruction"
+    else:
+        locus = "perception" if stated_bad > 0 else "reasoning"
     return {
         "n_claims": len(obs),
         "perception_precision": n_ok / (n_ok + n_bad) if (n_ok + n_bad) else None,
