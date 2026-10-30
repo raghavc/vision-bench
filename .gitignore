@@ -8,6 +8,7 @@ config/settings.toml
 .env
 # run artifacts (large); commit selected reports manually
 runs/
-datasets/
-!datasets/.gitkeep
 .preview/
+datasets/*
+!datasets/.gitkeep
+previews/

@@ -1,0 +1,2 @@
+[console_scripts]
+visionbench = visionbench.cli:main
