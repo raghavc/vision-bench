@@ -96,7 +96,8 @@ def cmd_run(args, settings):
     name = args.run_name or f"{Path(args.dataset).name}-{mode}-{time.strftime('%Y%m%d-%H%M%S')}"
     run_dir = settings.path("output_dir") / name
     run = Run(settings, _dataset_root(settings, args.dataset), run_dir, models=models, mode=mode, conditions=conds,
-              samples=samples, families=args.families.split(",") if args.families else None, limit=args.limit)
+              samples=samples, families=args.families.split(",") if args.families else None, limit=args.limit,
+              per_family=args.per_family)
     print(f"[run] -> {run_dir}", file=sys.stderr)
     asyncio.run(run.collect())
     asyncio.run(run.verify())
@@ -261,6 +262,7 @@ def main(argv=None):
         if name == "run":
             p.add_argument("--families", default=None)
             p.add_argument("--limit", type=int, default=None)
+            p.add_argument("--per-family", type=int, default=None, help="stratified subset: N items per family")
             p.add_argument("--run-name", default=None)
             p.add_argument("--effort", default=None)
             p.add_argument("--max-tokens", type=int, default=None)

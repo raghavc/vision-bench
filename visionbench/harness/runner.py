@@ -41,7 +41,8 @@ def _read_jsonl(path: Path) -> list[dict[str, Any]]:
 
 class Run:
     def __init__(self, settings: Settings, dataset_root: Path, run_dir: Path, *, models: list[str], mode: str,
-                 conditions: list[str], samples: int, families: list[str] | None = None, limit: int | None = None):
+                 conditions: list[str], samples: int, families: list[str] | None = None, limit: int | None = None,
+                 per_family: int | None = None):
         self.settings = settings
         self.dataset_root = dataset_root
         self.run_dir = run_dir
@@ -51,6 +52,7 @@ class Run:
         self.samples = samples
         self.families = families
         self.limit = limit
+        self.per_family = per_family
         run_dir.mkdir(parents=True, exist_ok=True)
         (run_dir / "ledger").mkdir(exist_ok=True)
         self.attempts_path = run_dir / "attempts.jsonl"
@@ -67,6 +69,22 @@ class Run:
 
     def items(self) -> list[TaskInstance]:
         items = ds.load(self.dataset_root, self.families, self.limit)
+        if self.per_family:
+            # stratified subset: spread the first N items of each family across difficulty levels
+            by_fam: dict[str, list[TaskInstance]] = {}
+            for it in sorted(items, key=lambda i: (i.family, i.seed, i.difficulty, i.render_seed)):
+                by_fam.setdefault(it.family, []).append(it)
+            items = []
+            for fam_items in by_fam.values():
+                levels = sorted({i.difficulty for i in fam_items})
+                picked, k = [], 0
+                while len(picked) < min(self.per_family, len(fam_items)):
+                    lvl = levels[(k * 2 + len(levels) // 2) % len(levels)]
+                    cand = [i for i in fam_items if i.difficulty == lvl and i not in picked]
+                    if cand:
+                        picked.append(cand[0])
+                    k += 1
+                items += picked
         for it in items:
             it.load_images(self.dataset_root)
         return items
