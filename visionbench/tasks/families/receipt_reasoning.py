@@ -40,6 +40,7 @@ def money(x: Decimal) -> Decimal:
 @register
 class ReceiptReasoning(TaskFamily):
     name = "receipt_reasoning"
+    version = "2"  # v2: explicit UNIT PRICE column and category-level rounding (two ambiguities found live)
     description = "Read a receipt image and compute amounts under printed discount/tax/void rules."
     skills = ["ocr", "document_understanding", "arithmetic", "instruction_following"]
 
@@ -88,17 +89,19 @@ class ReceiptReasoning(TaskFamily):
             policy.append(f"* Sales tax {tax_pct}% on HOUSEHOLD (H) items only,")
             policy.append("  charged after discounts")
         if policy:
-            policy.append("* Discount and tax are each rounded")
+            policy.append("* Discount and tax are computed on the")
+            policy.append("  category totals, then each rounded")
             policy.append("  to the nearest cent")
         img = self._render(lines, policy, bool(LINE_TOTALS[difficulty]), style, rng)
         if ROTATE[difficulty]:
             img = img.rotate(float(rng.uniform(-4, 4)), expand=True, fillcolor=style.background)
         img = finish(img, style, noise_rng)
-        prompt = ("The image shows a store receipt. Lines that are struck through were voided and are not charged. "
+        prompt = ("The image shows a store receipt. Each line lists quantity, item, category and UNIT price (a line "
+                  "costs quantity x unit price). Lines that are struck through were voided and are not charged. "
                   f"{question}")
         return {
             "prompt": prompt,
-            "answer": AnswerSpec(kind="number", value=float(value), tolerance=0.005,
+            "answer": AnswerSpec(kind="number", value=float(value), tolerance=0.011,
                                  format_hint="a dollar amount like 41.37 (no currency symbol needed)"),
             "images": [img],
             "facts": {
@@ -120,13 +123,13 @@ class ReceiptReasoning(TaskFamily):
         draw.text((W / 2, 50), "GREENLEAF MARKET", font=mono_b, fill=ink, anchor="mm")
         draw.text((W / 2, 84), "Store #0417   Reg 03   10/14", font=mono, fill=ink, anchor="mm")
         y = 130
-        draw.text((40, y), "QTY ITEM              CAT   PRICE" + ("   TOTAL" if show_totals else ""),
+        draw.text((40, y), "QTY ITEM              CAT  UNIT PR" + ("  LINE TOT" if show_totals else ""),
                   font=font(18, "DejaVu Sans Mono", True), fill=ink, anchor="lm")
         y += 16
         draw.line([(40, y), (W - 40, y)], fill=ink, width=1)
         y += 28
         for ln in lines:
-            item = f"{ln['qty']:>2}  {ln['name']:<16}  {ln['cat']}  {ln['price']:>6}"
+            item = f"{ln['qty']:>2}x {ln['name']:<16}  {ln['cat']}  @{ln['price']:>6}"
             if show_totals:
                 item += f"  {ln['price'] * ln['qty']:>7.2f}"
             draw.text((40, y), item, font=font(19, "DejaVu Sans Mono"), fill=ink, anchor="lm")

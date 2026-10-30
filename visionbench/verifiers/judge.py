@@ -188,14 +188,28 @@ class Judges:
         self.rubric_show_image = bool(j.get("rubric_show_image", self.show_image))
         self.max_side = int(settings.harness.get("max_image_side", 1568))
         self.usage = Usage()
+        self._gate = asyncio.Semaphore(int(j.get("concurrency", 6)))
         self.cost_log = None  # path; set by the runner so judge spend is auditable
 
-    async def _call(self, system: str, content: list[dict[str, Any]], schema: dict[str, Any]) -> dict[str, Any]:
-        res = await self.claude.create(
-            model=self.model, system=system, max_tokens=self.max_tokens, effort=self.effort,
-            messages=[{"role": "user", "content": content}], json_schema=schema, fallbacks=self.fallbacks,
-            thinking_display="omitted",
-        )
+    async def _call(self, system: str, content: list[dict[str, Any]], schema: dict[str, Any],
+                    max_tokens: int | None = None) -> dict[str, Any]:
+        # Judge calls fan out (criteria x votes); a dedicated gate keeps bursts bounded, which also bounds
+        # the credit OpenRouter reserves for in-flight requests.
+        async with self._gate:
+            for attempt in range(5):
+                try:
+                    res = await self.claude.create(
+                        model=self.model, system=system, max_tokens=max_tokens or self.max_tokens, effort=self.effort,
+                        messages=[{"role": "user", "content": content}], json_schema=schema,
+                        fallbacks=self.fallbacks, thinking_display="omitted",
+                    )
+                    break
+                except Exception as e:  # 402 "in-flight credit" and 429 are transient: back off and retry
+                    status = getattr(e, "status_code", None)
+                    if status in (402, 429) and attempt < 4:
+                        await asyncio.sleep(5 * 2 ** attempt)
+                        continue
+                    raise
         self.usage.add(res.usage)
         if self.cost_log:
             with open(self.cost_log, "a") as f:
@@ -218,7 +232,7 @@ class Judges:
                 f"<task>\n{instance.prompt}\n</task>\n\n<reference_facts>\n{facts}\n</reference_facts>\n\n"
                 f"<criterion id=\"{item.id}\">\n{item.criterion}\n</criterion>\n\n"
                 f"<candidate_response>\n{response}\n</candidate_response>")}]
-            outs = await asyncio.gather(*[self._call(RUBRIC_SYSTEM, content, VERDICT_SCHEMA)
+            outs = await asyncio.gather(*[self._call(RUBRIC_SYSTEM, content, VERDICT_SCHEMA, max_tokens=4000)
                                           for _ in range(self.samples)])
             votes = [o.get("verdict") for o in outs if o.get("verdict")]
             c = Counter(votes)
@@ -243,7 +257,7 @@ class Judges:
         content = [{"type": "text", "text": (
             f"<question>\n{instance.prompt}\n</question>\n<reference_answer>{ref}</reference_answer>\n"
             f"<candidate_response>\n{response[-6000:]}\n</candidate_response>")}]
-        return await self._call(EQUIV_SYSTEM, content, EQUIV_SCHEMA)
+        return await self._call(EQUIV_SYSTEM, content, EQUIV_SCHEMA, max_tokens=4000)
 
     # ------------------------------------------------------------ process
     async def diagnose(self, instance: TaskInstance, response: str, thinking: str) -> dict[str, Any]:
@@ -255,7 +269,7 @@ class Judges:
             f"<correct_answer>{ref}</correct_answer>\n"
             f"<model_reasoning_summary>\n{thinking[-12000:]}\n</model_reasoning_summary>\n"
             f"<model_response>\n{response[-8000:]}\n</model_response>")}]
-        return await self._call(PROCESS_SYSTEM, content, PROCESS_SCHEMA)
+        return await self._call(PROCESS_SYSTEM, content, PROCESS_SCHEMA, max_tokens=6000)
 
     # ---------------------------------------------------------- critique
     async def critique(self, instance: TaskInstance, key_facts: list[str], attempt_view: dict[str, Any],
@@ -272,7 +286,7 @@ class Judges:
             f"<agent_reasoning_summary>\n{(attempt_view.get('thinking') or '(not available)')[-14000:]}\n</agent_reasoning_summary>\n"
             f"<agent_visible_response>\n{(attempt_view.get('response') or '')[-8000:]}\n</agent_visible_response>\n"
             f"<agent_tool_calls>\n{tool_txt}\n</agent_tool_calls>")}]
-        return await self._call(CRITIQUE_SYSTEM, content, CRITIQUE_SCHEMA)
+        return await self._call(CRITIQUE_SYSTEM, content, CRITIQUE_SCHEMA, max_tokens=12000)
 
 
 def b64(data: bytes) -> str:

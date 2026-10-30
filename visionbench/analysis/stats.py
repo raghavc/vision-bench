@@ -170,8 +170,11 @@ def holm(pvals: dict[str, float]) -> dict[str, float]:
 
 def rank_spread(model_rows: dict[str, list[Row]], n_boot: int = 1000) -> dict[str, tuple[int, int]]:
     """Bootstrap rank intervals (clusters resampled jointly across models)."""
-    models = list(model_rows)
-    ims = {m: item_means(r) for m, r in model_rows.items()}
+    ims_all = {m: item_means(r) for m, r in model_rows.items()}
+    # subjects with partial coverage would shrink the shared item set to almost nothing; rank the well-covered ones
+    most = max((len(v) for v in ims_all.values()), default=0)
+    ims = {m: v for m, v in ims_all.items() if len(v) >= 0.8 * most}
+    models = list(ims)
     shared = sorted(set.intersection(*[set(v) for v in ims.values()])) if ims else []
     if not shared or len(models) < 2:
         return {m: (1, 1) for m in models}

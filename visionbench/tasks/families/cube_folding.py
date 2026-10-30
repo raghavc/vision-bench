@@ -102,7 +102,7 @@ GLYPHS = [0, 0, 0, 1, 1, 1]
 @register
 class CubeFolding(TaskFamily):
     name = "cube_folding"
-    version = "2"
+    version = "3"  # v3: the glyph set is stated (a rotated P reads as "d"; found live)
     description = "Fold a cube net mentally; reason about hidden faces and rotations (chirality-correct)."
     skills = ["spatial_3d", "mental_rotation"]
 
@@ -166,6 +166,9 @@ class CubeFolding(TaskFamily):
                 val = {"top": name_at(VIEW_DIRS["top"], Qm), "front": name_at(VIEW_DIRS["front"], Qm)}
                 spec = AnswerSpec(kind="mapping", value=val, partial_credit=True, format_hint="top=X, front=Y")
             facts = {"view": {k: name_at(v) for k, v in VIEW_DIRS.items()}}
+        if glyph:
+            prompt += (f" (The six faces carry the symbols {', '.join(sorted(names))}; each appears once and may be "
+                       "drawn rotated.)")
         images = [finish(im, style, noise_rng) for im in images]
         facts.update({"net_cells": net, "names": names})
         return {"prompt": prompt, "answer": spec, "images": images, "facts": facts}

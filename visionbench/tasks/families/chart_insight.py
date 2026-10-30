@@ -39,6 +39,7 @@ NOISE = [0, 0.4, 0.6, 0.9, 1.1, 1.3]
 @register
 class ChartInsight(TaskFamily):
     name = "chart_insight"
+    version = "2"  # v2: per-type localisation tolerance; mislocated != fabricated (found live: 100% judge agreement, unfair rubric)
     description = "Free-form anomaly analysis of a time-series chart, graded by a fact-derived rubric."
     skills = ["chart_reading", "analysis", "open_ended"]
 
@@ -64,21 +65,26 @@ class ChartInsight(TaskFamily):
             elif typ == "gap":
                 mask[p:p + int(rng.integers(4, 7))] = False
             elif typ == "slope_change":
-                y[p:] += rng.choice([-1, 1]) * rng.uniform(0.25, 0.4) * (t[p:] - p)
+                y[p:] += rng.choice([-1, 1]) * rng.uniform(0.45, 0.65) * (t[p:] - p)
             anomalies.append({"type": str(typ), "t": int(p)})
         img = self._render(t, y, mask, style)
         img = finish(img, style, noise_rng)
+        # localisation tolerance reflects how sharply each kind of anomaly is defined visually
+        TOL = {"spike": 3, "dip": 3, "level_shift": 5, "gap": 5, "slope_change": 12}
         rubric = [
             RubricItem(id=f"a{i}", criterion=(f"Identifies {DESC[a['type']]} at approximately t={a['t']} "
-                                              f"(a location within ±4 of {a['t']} counts; the anomaly type must "
-                                              "be described compatibly, exact wording not required)."), weight=2.0)
+                                              f"(any reported location within ±{TOL[a['type']]} of {a['t']} counts"
+                                              + ("; for a gap, any overlap with the missing range counts" if a['type'] == 'gap' else "")
+                                              + "; the kind must be described compatibly, exact wording not required)."),
+                       weight=2.0)
             for i, a in enumerate(anomalies)
         ]
         rubric.append(RubricItem(
             id="no_fabrication", critical=True, weight=2.0,
-            criterion=("Does not claim any anomaly that is absent from the reference list. Ordinary noise or the "
-                       "smooth periodic oscillation described as such is fine; calling them a spike, dip, shift, gap "
-                       "or slope change is a fabrication.")))
+            criterion=("Does not invent anomalies. A reported anomaly is a fabrication ONLY if no reference anomaly of a "
+                       "compatible kind lies within ±15 time steps of it. A real anomaly reported at an imprecise location "
+                       "is a localisation miss (graded by the other criteria), not a fabrication. Calling ordinary noise "
+                       "or the smooth periodic oscillation an anomaly is a fabrication.")))
         rubric.append(RubricItem(
             id="count", weight=1.0,
             criterion=f"States or clearly implies that there are exactly {len(anomalies)} anomalies in total."))

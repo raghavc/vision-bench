@@ -203,7 +203,11 @@ class Run:
         async def one(a: Attempt):
             inst = items[a.uid]
             async with gate:
-                v = await self._verdict(a, inst, judges)
+                try:
+                    v = await self._verdict(a, inst, judges)
+                except Exception as e:  # leave it unverified; a later `verify` retries it
+                    print(f"[verify] {a.key}: {type(e).__name__}: {str(e)[:160]}", file=sys.stderr)
+                    return
                 if do_process and judges and v.outcome in ("incorrect", "unparseable") and a.condition == "vision":
                     try:
                         diag = await judges.diagnose(inst, a.final_text, a.thinking_summary)

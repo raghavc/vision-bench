@@ -53,6 +53,7 @@ class Gear:
 @register
 class GearTrain(TaskFamily):
     name = "gear_train"
+    version = "2"  # v2: at most one belt per gear (collinear belt segments looked like one belt; found live)
     description = "Propagate rotation direction and speed through gear meshes and belts."
     skills = ["physical_reasoning", "spatial_topology", "arithmetic"]
 
@@ -133,7 +134,8 @@ class GearTrain(TaskFamily):
             parent = int(rng.choice(range(len(gears)), p=self._recent_weights(len(gears))))
             teeth = int(rng.integers(8, 21)) * 2
             remaining = n_total - len(gears)
-            use_belt = n_belts > 0 and (rng.random() < 0.4 or remaining <= n_belts)
+            belted = {a for a, _, _ in belts} | {b for _, b, _ in belts}
+            use_belt = n_belts > 0 and parent not in belted and (rng.random() < 0.4 or remaining <= n_belts)
             link = "mesh"
             if use_belt:
                 link = "crossed_belt" if rng.random() < P_CROSSED[d] else "open_belt"
