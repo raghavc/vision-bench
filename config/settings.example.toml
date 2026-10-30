@@ -17,6 +17,7 @@ timeout_seconds = 900
 api_key = ""            # sk-or-...
 budget_usd = 14.0       # hard stop: no new calls once provider-reported spend reaches this
 max_tokens = 16000      # per-call output cap (reasoning tokens count as output)
+call_timeout_seconds = 420  # hard wall-clock limit per call; stalled calls are retried
 
 [huggingface]
 token = ""              # hf_... only needed for gated sets (ZeroBench); accept their terms on the Hub first

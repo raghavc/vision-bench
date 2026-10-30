@@ -113,8 +113,9 @@ def cmd_critique(args, settings):
     from visionbench.harness.runner import Run
     run_dir = Path(args.run) if Path(args.run).exists() else settings.path("output_dir") / args.run
     m = json.loads((run_dir / "manifest.json").read_text())
+    settings = settings.with_overrides({"openrouter": {"budget_usd": args.budget}})
     run = Run(settings, Path(m["dataset"]), run_dir, models=m["models"], mode=m["mode"], conditions=m["conditions"],
-              samples=m["samples"], families=m.get("families"))
+              samples=m["samples"], families=m.get("families"), per_family=args.per_family)
     asyncio.run(run.critique(all_samples=args.all_samples, limit=args.limit,
                              models=args.models.split(",") if args.models else None))
     _report(run_dir, settings)
@@ -288,6 +289,8 @@ def main(argv=None):
     p.add_argument("--all-samples", action="store_true", help="critique every sample, not just sample 0")
     p.add_argument("--limit", type=int, default=None)
     p.add_argument("--models", default=None)
+    p.add_argument("--per-family", type=int, default=None, help="critique a stratified subset: N items per family")
+    p.add_argument("--budget", type=float, default=None, help="OpenRouter USD cap for this invocation")
     p.set_defaults(fn=cmd_critique)
 
     p = sub.add_parser("report")

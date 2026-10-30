@@ -204,9 +204,9 @@ class Judges:
                         fallbacks=self.fallbacks, thinking_display="omitted",
                     )
                     break
-                except Exception as e:  # 402 "in-flight credit" and 429 are transient: back off and retry
+                except Exception as e:  # 402 "in-flight credit", 429 and stalled calls are transient: retry
                     status = getattr(e, "status_code", None)
-                    if status in (402, 429) and attempt < 4:
+                    if (status in (402, 429) or isinstance(e, asyncio.TimeoutError)) and attempt < 4:
                         await asyncio.sleep(5 * 2 ** attempt)
                         continue
                     raise

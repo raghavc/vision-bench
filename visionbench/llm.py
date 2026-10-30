@@ -55,6 +55,7 @@ class Claude:
         self.or_budget = float(o.get("budget_usd", 0) or 0)
         self.or_spent = 0.0
         self.or_max_tokens = int(o.get("max_tokens", 16000))
+        self.or_call_timeout = float(o.get("call_timeout_seconds", 420))
         self._spend_lock = asyncio.Lock()
 
     @property
@@ -189,8 +190,13 @@ class Claude:
             kwargs["response_format"] = {"type": "json_schema",
                                          "json_schema": {"name": "output", "strict": True, "schema": json_schema}}
         t0 = time.monotonic()
-        resp = await self.openrouter.chat.completions.create(
-            model=model, messages=oa_msgs, max_tokens=min(max_tokens, self.or_max_tokens), extra_body=extra, **kwargs)
+        # Hard wall-clock limit: OpenRouter keeps idle connections alive with whitespace while an upstream
+        # provider hangs, so the HTTP read timeout never fires (observed live: requests stalled for 40+ min).
+        resp = await asyncio.wait_for(
+            self.openrouter.chat.completions.create(
+                model=model, messages=oa_msgs, max_tokens=min(max_tokens, self.or_max_tokens), extra_body=extra,
+                **kwargs),
+            timeout=self.or_call_timeout)
         latency = time.monotonic() - t0
         if not resp.choices:
             raise RuntimeError(f"OpenRouter returned no choices: {str(resp)[:300]}")

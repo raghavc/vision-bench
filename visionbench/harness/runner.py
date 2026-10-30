@@ -229,6 +229,10 @@ class Run:
             return Verdict(attempt_key=a.key, uid=a.uid, outcome=outcome, score=0.0, details={"error": a.error})
         spec = inst.answer
         if spec.kind == "rubric":
+            if a.condition == "blind" and not self.settings.run.get("judge_blind_rubric", False):
+                # an image-free answer can't locate anomalies; skip the judge spend and score it as a failure
+                return Verdict(attempt_key=a.key, uid=a.uid, outcome="incorrect", score=0.0,
+                               details={"note": "blind rubric item not judged"}, verifier="rubric_skipped_blind")
             response = a.raw_answer if (a.mode == "agentic" and a.raw_answer) else a.final_text
             if not response.strip():
                 return Verdict(attempt_key=a.key, uid=a.uid, outcome="unparseable", score=0.0)
