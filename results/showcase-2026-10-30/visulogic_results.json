@@ -1,0 +1,1538 @@
+{
+ "run_dir": "/Users/raghav/Desktop/Code/Startups/vision-eval/runs/showcase-visulogic",
+ "subjects": [
+  {
+   "model": "or:anthropic/claude-haiku-5.5",
+   "mode": "direct",
+   "label": "or:anthropic/claude-haiku-5.5 [direct]",
+   "accuracy": {
+    "mean": 0.28,
+    "se": 0.09165151389911678,
+    "ci95": [
+     0.12,
+     0.48
+    ],
+    "n_items": 25,
+    "n_clusters": 25,
+    "n_attempts": 25
+   },
+   "partial_credit": {
+    "mean": 0.28,
+    "se": 0.09165151389911678,
+    "ci95": [
+     0.12,
+     0.44
+    ],
+    "n_items": 25,
+    "n_clusters": 25,
+    "n_attempts": 25
+   },
+   "pass_k": {
+    "pass@1": 0.28,
+    "pass^1": 0.28
+   },
+   "outcomes": {
+    "correct": 7,
+    "incorrect": 18
+   },
+   "by_family": {
+    "ext:visulogic": {
+     "mean": 0.28,
+     "se": 0.09165151389911678,
+     "ci95": [
+      0.12,
+      0.48
+     ],
+     "n_items": 25,
+     "n_clusters": 25,
+     "n_attempts": 25,
+     "chance": 0.25,
+     "chance_normalized": 0.040000000000000036
+    }
+   },
+   "by_difficulty": {
+    "0": {
+     "mean": 0.28,
+     "se": 0.09165151389911678,
+     "ci95": [
+      0.12,
+      0.44
+     ],
+     "n_items": 25,
+     "n_clusters": 25,
+     "n_attempts": 25
+    }
+   },
+   "by_family_difficulty": {
+    "ext:visulogic": {
+     "0": 0.28
+    }
+   },
+   "calibration": {
+    "n": 25,
+    "ece": 0.1144,
+    "brier": 0.187792,
+    "mean_conf": 0.344,
+    "accuracy": 0.28,
+    "overconfidence": 0.06399999999999995,
+    "bins": [
+     {
+      "bin": [
+       0.2,
+       0.30000000000000004
+      ],
+      "n": 16,
+      "conf": 0.246875,
+      "acc": 0.25
+     },
+     {
+      "bin": [
+       0.4,
+       0.5
+      ],
+      "n": 4,
+      "conf": 0.42000000000000004,
+      "acc": 0.25
+     },
+     {
+      "bin": [
+       0.5,
+       0.6000000000000001
+      ],
+      "n": 3,
+      "conf": 0.5166666666666667,
+      "acc": 0.0
+     },
+     {
+      "bin": [
+       0.6000000000000001,
+       0.7000000000000001
+      ],
+      "n": 1,
+      "conf": 0.62,
+      "acc": 1.0
+     },
+     {
+      "bin": [
+       0.8,
+       0.9
+      ],
+      "n": 1,
+      "conf": 0.8,
+      "acc": 1.0
+     }
+    ]
+   },
+   "cost": {
+    "total_usd": 0.0259698,
+    "usd_per_attempt": 0.001038792,
+    "usd_per_correct": 0.0037099714285714286,
+    "mean_output_tokens": 1981.4,
+    "latency_p50": 10.597657124977559,
+    "latency_p90": 17.61098059157376,
+    "mean_tool_calls": 0.0
+   },
+   "error_attribution": {}
+  },
+  {
+   "model": "or:google/gemini-4-argon",
+   "mode": "direct",
+   "label": "or:google/gemini-4-argon [direct]",
+   "accuracy": {
+    "mean": 0.68,
+    "se": 0.09521904571390467,
+    "ci95": [
+     0.48,
+     0.84
+    ],
+    "n_items": 25,
+    "n_clusters": 25,
+    "n_attempts": 25
+   },
+   "partial_credit": {
+    "mean": 0.68,
+    "se": 0.09521904571390467,
+    "ci95": [
+     0.48,
+     0.84
+    ],
+    "n_items": 25,
+    "n_clusters": 25,
+    "n_attempts": 25
+   },
+   "pass_k": {
+    "pass@1": 0.68,
+    "pass^1": 0.68
+   },
+   "outcomes": {
+    "correct": 17,
+    "incorrect": 8
+   },
+   "by_family": {
+    "ext:visulogic": {
+     "mean": 0.68,
+     "se": 0.09521904571390467,
+     "ci95": [
+      0.52,
+      0.84
+     ],
+     "n_items": 25,
+     "n_clusters": 25,
+     "n_attempts": 25,
+     "chance": 0.25,
+     "chance_normalized": 0.5733333333333334
+    }
+   },
+   "by_difficulty": {
+    "0": {
+     "mean": 0.68,
+     "se": 0.09521904571390467,
+     "ci95": [
+      0.48,
+      0.84
+     ],
+     "n_items": 25,
+     "n_clusters": 25,
+     "n_attempts": 25
+    }
+   },
+   "by_family_difficulty": {
+    "ext:visulogic": {
+     "0": 0.68
+    }
+   },
+   "calibration": {
+    "n": 25,
+    "ece": 0.2919999999999998,
+    "brier": 0.29126399999999997,
+    "mean_conf": 0.9719999999999999,
+    "accuracy": 0.68,
+    "overconfidence": 0.2919999999999998,
+    "bins": [
+     {
+      "bin": [
+       0.9,
+       1.0
+      ],
+      "n": 25,
+      "conf": 0.9719999999999999,
+      "acc": 0.68
+     }
+    ]
+   },
+   "cost": {
+    "total_usd": 0.890818,
+    "usd_per_attempt": 0.03563272,
+    "usd_per_correct": 0.05240105882352941,
+    "mean_output_tokens": 3308.56,
+    "latency_p50": 34.246093082998414,
+    "latency_p90": 79.8362071248237,
+    "mean_tool_calls": 0.0
+   },
+   "error_attribution": {}
+  },
+  {
+   "model": "or:openai/gpt-6-luna",
+   "mode": "direct",
+   "label": "or:openai/gpt-6-luna [direct]",
+   "accuracy": {
+    "mean": 0.44,
+    "se": 0.10132456102380444,
+    "ci95": [
+     0.24,
+     0.64
+    ],
+    "n_items": 25,
+    "n_clusters": 25,
+    "n_attempts": 25
+   },
+   "partial_credit": {
+    "mean": 0.44,
+    "se": 0.10132456102380444,
+    "ci95": [
+     0.24,
+     0.64
+    ],
+    "n_items": 25,
+    "n_clusters": 25,
+    "n_attempts": 25
+   },
+   "pass_k": {
+    "pass@1": 0.44,
+    "pass^1": 0.44
+   },
+   "outcomes": {
+    "correct": 11,
+    "incorrect": 14
+   },
+   "by_family": {
+    "ext:visulogic": {
+     "mean": 0.44,
+     "se": 0.10132456102380444,
+     "ci95": [
+      0.24,
+      0.64
+     ],
+     "n_items": 25,
+     "n_clusters": 25,
+     "n_attempts": 25,
+     "chance": 0.25,
+     "chance_normalized": 0.25333333333333335
+    }
+   },
+   "by_difficulty": {
+    "0": {
+     "mean": 0.44,
+     "se": 0.10132456102380444,
+     "ci95": [
+      0.24,
+      0.64
+     ],
+     "n_items": 25,
+     "n_clusters": 25,
+     "n_attempts": 25
+    }
+   },
+   "by_family_difficulty": {
+    "ext:visulogic": {
+     "0": 0.44
+    }
+   },
+   "calibration": {
+    "n": 25,
+    "ece": 0.386,
+    "brier": 0.38149199999999994,
+    "mean_conf": 0.7692000000000001,
+    "accuracy": 0.44,
+    "overconfidence": 0.3292000000000001,
+    "bins": [
+     {
+      "bin": [
+       0.2,
+       0.30000000000000004
+      ],
+      "n": 1,
+      "conf": 0.29,
+      "acc": 1.0
+     },
+     {
+      "bin": [
+       0.4,
+       0.5
+      ],
+      "n": 1,
+      "conf": 0.42,
+      "acc": 0.0
+     },
+     {
+      "bin": [
+       0.5,
+       0.6000000000000001
+      ],
+      "n": 1,
+      "conf": 0.55,
+      "acc": 0.0
+     },
+     {
+      "bin": [
+       0.6000000000000001,
+       0.7000000000000001
+      ],
+      "n": 4,
+      "conf": 0.6625,
+      "acc": 0.5
+     },
+     {
+      "bin": [
+       0.7000000000000001,
+       0.8
+      ],
+      "n": 6,
+      "conf": 0.755,
+      "acc": 0.5
+     },
+     {
+      "bin": [
+       0.8,
+       0.9
+      ],
+      "n": 6,
+      "conf": 0.8383333333333334,
+      "acc": 0.16666666666666666
+     },
+     {
+      "bin": [
+       0.9,
+       1.0
+      ],
+      "n": 6,
+      "conf": 0.96,
+      "acc": 0.6666666666666666
+     }
+    ]
+   },
+   "cost": {
+    "total_usd": 0.041073,
+    "usd_per_attempt": 0.00164292,
+    "usd_per_correct": 0.0037339090909090907,
+    "mean_output_tokens": 3205.92,
+    "latency_p50": 26.592566249950323,
+    "latency_p90": 62.96385819100544,
+    "mean_tool_calls": 0.0
+   },
+   "error_attribution": {}
+  },
+  {
+   "model": "or:openai/gpt-6.1-terra",
+   "mode": "direct",
+   "label": "or:openai/gpt-6.1-terra [direct]",
+   "accuracy": {
+    "mean": 0.48,
+    "se": 0.10198039027185574,
+    "ci95": [
+     0.28,
+     0.68
+    ],
+    "n_items": 25,
+    "n_clusters": 25,
+    "n_attempts": 25
+   },
+   "partial_credit": {
+    "mean": 0.48,
+    "se": 0.10198039027185574,
+    "ci95": [
+     0.28,
+     0.68
+    ],
+    "n_items": 25,
+    "n_clusters": 25,
+    "n_attempts": 25
+   },
+   "pass_k": {
+    "pass@1": 0.48,
+    "pass^1": 0.48
+   },
+   "outcomes": {
+    "correct": 12,
+    "incorrect": 13
+   },
+   "by_family": {
+    "ext:visulogic": {
+     "mean": 0.48,
+     "se": 0.10198039027185574,
+     "ci95": [
+      0.28,
+      0.64
+     ],
+     "n_items": 25,
+     "n_clusters": 25,
+     "n_attempts": 25,
+     "chance": 0.25,
+     "chance_normalized": 0.30666666666666664
+    }
+   },
+   "by_difficulty": {
+    "0": {
+     "mean": 0.48,
+     "se": 0.10198039027185574,
+     "ci95": [
+      0.28,
+      0.68
+     ],
+     "n_items": 25,
+     "n_clusters": 25,
+     "n_attempts": 25
+    }
+   },
+   "by_family_difficulty": {
+    "ext:visulogic": {
+     "0": 0.48
+    }
+   },
+   "calibration": {
+    "n": 25,
+    "ece": 0.44400000000000006,
+    "brier": 0.4164960000000001,
+    "mean_conf": 0.8800000000000001,
+    "accuracy": 0.48,
+    "overconfidence": 0.40000000000000013,
+    "bins": [
+     {
+      "bin": [
+       0.30000000000000004,
+       0.4
+      ],
+      "n": 1,
+      "conf": 0.38,
+      "acc": 0.0
+     },
+     {
+      "bin": [
+       0.4,
+       0.5
+      ],
+      "n": 1,
+      "conf": 0.45,
+      "acc": 1.0
+     },
+     {
+      "bin": [
+       0.6000000000000001,
+       0.7000000000000001
+      ],
+      "n": 1,
+      "conf": 0.65,
+      "acc": 0.0
+     },
+     {
+      "bin": [
+       0.7000000000000001,
+       0.8
+      ],
+      "n": 2,
+      "conf": 0.745,
+      "acc": 0.5
+     },
+     {
+      "bin": [
+       0.8,
+       0.9
+      ],
+      "n": 4,
+      "conf": 0.85,
+      "acc": 0.5
+     },
+     {
+      "bin": [
+       0.9,
+       1.0
+      ],
+      "n": 16,
+      "conf": 0.976875,
+      "acc": 0.5
+     }
+    ]
+   },
+   "cost": {
+    "total_usd": 0.14342,
+    "usd_per_attempt": 0.005736799999999999,
+    "usd_per_correct": 0.011951666666666666,
+    "mean_output_tokens": 1067.44,
+    "latency_p50": 11.778532208991237,
+    "latency_p90": 29.100382100185385,
+    "mean_tool_calls": 0.0
+   },
+   "error_attribution": {}
+  },
+  {
+   "model": "or:qwen/qwen3.8-flash",
+   "mode": "direct",
+   "label": "or:qwen/qwen3.8-flash [direct]",
+   "accuracy": {
+    "mean": 0.48,
+    "se": 0.10198039027185574,
+    "ci95": [
+     0.28,
+     0.68
+    ],
+    "n_items": 25,
+    "n_clusters": 25,
+    "n_attempts": 25
+   },
+   "partial_credit": {
+    "mean": 0.48,
+    "se": 0.10198039027185574,
+    "ci95": [
+     0.28,
+     0.68
+    ],
+    "n_items": 25,
+    "n_clusters": 25,
+    "n_attempts": 25
+   },
+   "pass_k": {
+    "pass@1": 0.48,
+    "pass^1": 0.48
+   },
+   "outcomes": {
+    "correct": 12,
+    "incorrect": 12,
+    "unparseable": 1
+   },
+   "by_family": {
+    "ext:visulogic": {
+     "mean": 0.48,
+     "se": 0.10198039027185574,
+     "ci95": [
+      0.28,
+      0.68
+     ],
+     "n_items": 25,
+     "n_clusters": 25,
+     "n_attempts": 25,
+     "chance": 0.25,
+     "chance_normalized": 0.30666666666666664
+    }
+   },
+   "by_difficulty": {
+    "0": {
+     "mean": 0.48,
+     "se": 0.10198039027185574,
+     "ci95": [
+      0.28,
+      0.68
+     ],
+     "n_items": 25,
+     "n_clusters": 25,
+     "n_attempts": 25
+    }
+   },
+   "by_family_difficulty": {
+    "ext:visulogic": {
+     "0": 0.48
+    }
+   },
+   "calibration": {
+    "n": 24,
+    "ece": 0.29999999999999993,
+    "brier": 0.293825,
+    "mean_conf": 0.6466666666666666,
+    "accuracy": 0.5,
+    "overconfidence": 0.1466666666666666,
+    "bins": [
+     {
+      "bin": [
+       0.2,
+       0.30000000000000004
+      ],
+      "n": 4,
+      "conf": 0.3,
+      "acc": 0.5
+     },
+     {
+      "bin": [
+       0.4,
+       0.5
+      ],
+      "n": 2,
+      "conf": 0.42500000000000004,
+      "acc": 0.5
+     },
+     {
+      "bin": [
+       0.5,
+       0.6000000000000001
+      ],
+      "n": 4,
+      "conf": 0.6,
+      "acc": 0.75
+     },
+     {
+      "bin": [
+       0.6000000000000001,
+       0.7000000000000001
+      ],
+      "n": 3,
+      "conf": 0.6833333333333332,
+      "acc": 0.0
+     },
+     {
+      "bin": [
+       0.7000000000000001,
+       0.8
+      ],
+      "n": 5,
+      "conf": 0.732,
+      "acc": 0.4
+     },
+     {
+      "bin": [
+       0.8,
+       0.9
+      ],
+      "n": 2,
+      "conf": 0.825,
+      "acc": 0.0
+     },
+     {
+      "bin": [
+       0.9,
+       1.0
+      ],
+      "n": 4,
+      "conf": 0.9275,
+      "acc": 1.0
+     }
+    ]
+   },
+   "cost": {
+    "total_usd": 0.135678612,
+    "usd_per_attempt": 0.00542714448,
+    "usd_per_correct": 0.011306551,
+    "mean_output_tokens": 11426.24,
+    "latency_p50": 262.79990054201335,
+    "latency_p90": 966.4173967918265,
+    "mean_tool_calls": 0.0
+   },
+   "error_attribution": {}
+  }
+ ],
+ "comparisons": [
+  {
+   "diff": -0.4,
+   "se": 0.11547005383792519,
+   "ci95": [
+    -0.6009999999999999,
+    -0.16
+   ],
+   "p_value": 0.0066,
+   "n_items": 25,
+   "n_clusters": 25,
+   "item_correlation": 0.23681377839895465,
+   "mde_80pct_power": 0.3233161507461905,
+   "a": "or:anthropic/claude-haiku-5.5 [direct]",
+   "b": "or:google/gemini-4-argon [direct]",
+   "p_holm": 0.066
+  },
+  {
+   "diff": -0.16,
+   "se": 0.13759844960366863,
+   "ci95": [
+    -0.4,
+    0.12
+   ],
+   "p_value": 0.3914,
+   "n_items": 25,
+   "n_clusters": 25,
+   "item_correlation": -0.014357683075131605,
+   "mde_80pct_power": 0.38527565889027215,
+   "a": "or:anthropic/claude-haiku-5.5 [direct]",
+   "b": "or:openai/gpt-6-luna [direct]",
+   "p_holm": 1.0
+  },
+  {
+   "diff": -0.2,
+   "se": 0.1,
+   "ci95": [
+    -0.4,
+    0.0
+   ],
+   "p_value": 0.124,
+   "n_items": 25,
+   "n_clusters": 25,
+   "item_correlation": 0.4707565417620042,
+   "mde_80pct_power": 0.27999999999999997,
+   "a": "or:anthropic/claude-haiku-5.5 [direct]",
+   "b": "or:openai/gpt-6.1-terra [direct]",
+   "p_holm": 1.0
+  },
+  {
+   "diff": -0.2,
+   "se": 0.11547005383792516,
+   "ci95": [
+    -0.44,
+    0.0
+   ],
+   "p_value": 0.1778,
+   "n_items": 25,
+   "n_clusters": 25,
+   "item_correlation": 0.29243966988245723,
+   "mde_80pct_power": 0.3233161507461904,
+   "a": "or:anthropic/claude-haiku-5.5 [direct]",
+   "b": "or:qwen/qwen3.8-flash [direct]",
+   "p_holm": 1.0
+  },
+  {
+   "diff": 0.24,
+   "se": 0.15577761927397232,
+   "ci95": [
+    -0.04,
+    0.56
+   ],
+   "p_value": 0.2084,
+   "n_items": 25,
+   "n_clusters": 25,
+   "item_correlation": -0.2556653716805367,
+   "mde_80pct_power": 0.4361773339671225,
+   "a": "or:google/gemini-4-argon [direct]",
+   "b": "or:openai/gpt-6-luna [direct]",
+   "p_holm": 1.0
+  },
+  {
+   "diff": 0.2,
+   "se": 0.12909944487358058,
+   "ci95": [
+    -0.04,
+    0.44
+   ],
+   "p_value": 0.2258,
+   "n_items": 25,
+   "n_clusters": 25,
+   "item_correlation": 0.14417419705003606,
+   "mde_80pct_power": 0.3614784456460256,
+   "a": "or:google/gemini-4-argon [direct]",
+   "b": "or:openai/gpt-6.1-terra [direct]",
+   "p_holm": 1.0
+  },
+  {
+   "diff": 0.2,
+   "se": 0.11547005383792516,
+   "ci95": [
+    0.0,
+    0.4
+   ],
+   "p_value": 0.1756,
+   "n_items": 25,
+   "n_clusters": 25,
+   "item_correlation": 0.31581014591912665,
+   "mde_80pct_power": 0.3233161507461904,
+   "a": "or:google/gemini-4-argon [direct]",
+   "b": "or:qwen/qwen3.8-flash [direct]",
+   "p_holm": 1.0
+  },
+  {
+   "diff": -0.04,
+   "se": 0.13515423288475528,
+   "ci95": [
+    -0.28,
+    0.20099999999999454
+   ],
+   "p_value": 1.0,
+   "n_items": 25,
+   "n_clusters": 25,
+   "item_correlation": 0.11613144917081455,
+   "mde_80pct_power": 0.3784318520773148,
+   "a": "or:openai/gpt-6-luna [direct]",
+   "b": "or:openai/gpt-6.1-terra [direct]",
+   "p_holm": 1.0
+  },
+  {
+   "diff": -0.04,
+   "se": 0.15790292376436013,
+   "ci95": [
+    -0.32,
+    0.24
+   ],
+   "p_value": 1.0,
+   "n_items": 25,
+   "n_clusters": 25,
+   "item_correlation": -0.2064559096370037,
+   "mde_80pct_power": 0.44212818654020836,
+   "a": "or:openai/gpt-6-luna [direct]",
+   "b": "or:qwen/qwen3.8-flash [direct]",
+   "p_holm": 1.0
+  },
+  {
+   "diff": 0.0,
+   "se": 0.08164965809277261,
+   "ci95": [
+    -0.16,
+    0.16
+   ],
+   "p_value": 1.0,
+   "n_items": 25,
+   "n_clusters": 25,
+   "item_correlation": 0.6794871794871794,
+   "mde_80pct_power": 0.2286190426597633,
+   "a": "or:openai/gpt-6.1-terra [direct]",
+   "b": "or:qwen/qwen3.8-flash [direct]",
+   "p_holm": 1.0
+  }
+ ],
+ "n_rows": 125,
+ "rank_spread": {
+  "or:anthropic/claude-haiku-5.5 [direct]": [
+   3,
+   5
+  ],
+  "or:google/gemini-4-argon [direct]": [
+   1,
+   2
+  ],
+  "or:openai/gpt-6-luna [direct]": [
+   1,
+   5
+  ],
+  "or:openai/gpt-6.1-terra [direct]": [
+   2,
+   4
+  ],
+  "or:qwen/qwen3.8-flash [direct]": [
+   2,
+   5
+  ]
+ },
+ "irt": {
+  "theta": {
+   "or:anthropic/claude-haiku-5.5 [direct]": -1.2255866388301786,
+   "or:google/gemini-4-argon [direct]": 1.2478469451318848,
+   "or:openai/gpt-6-luna [direct]": -0.16699176669077706,
+   "or:openai/gpt-6.1-terra [direct]": 0.07236573019453536,
+   "or:qwen/qwen3.8-flash [direct]": 0.07236573019453538
+  },
+  "family_mean_difficulty": {
+   "ext:visulogic": 0.10457150047234567
+  },
+  "suspect_items": [
+   {
+    "uid": "17ed46c926f45765",
+    "best_subject": "or:google/gemini-4-argon [direct]",
+    "best_acc": 0.0,
+    "max_other_acc": 1.0,
+    "difficulty_b": -0.4547093832112678
+   },
+   {
+    "uid": "26fadc6b8fac294f",
+    "best_subject": "or:google/gemini-4-argon [direct]",
+    "best_acc": 0.0,
+    "max_other_acc": 1.0,
+    "difficulty_b": 1.5030288361989617
+   },
+   {
+    "uid": "4d24d9bd5a5c7ad7",
+    "best_subject": "or:google/gemini-4-argon [direct]",
+    "best_acc": 0.0,
+    "max_other_acc": 1.0,
+    "difficulty_b": 1.5030288361989617
+   },
+   {
+    "uid": "b0ebd62ea6aa037d",
+    "best_subject": "or:google/gemini-4-argon [direct]",
+    "best_acc": 0.0,
+    "max_other_acc": 1.0,
+    "difficulty_b": 1.5030288361989617
+   },
+   {
+    "uid": "40acc94735e1cfe4",
+    "best_subject": "or:google/gemini-4-argon [direct]",
+    "best_acc": 0.0,
+    "max_other_acc": 1.0,
+    "difficulty_b": 1.5030288361989617
+   },
+   {
+    "uid": "6953999bea12157c",
+    "best_subject": "or:google/gemini-4-argon [direct]",
+    "best_acc": 0.0,
+    "max_other_acc": 1.0,
+    "difficulty_b": 0.4517540687982909
+   },
+   {
+    "uid": "58fc49b47ede779f",
+    "best_subject": "or:google/gemini-4-argon [direct]",
+    "best_acc": 0.0,
+    "max_other_acc": 1.0,
+    "difficulty_b": 0.4517540687982909
+   }
+  ]
+ },
+ "blind_solvable_items": [],
+ "consensus_wrong_items": [
+  {
+   "uid": "26fadc6b8fac294f",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"B\"",
+   "key": "\"D\"",
+   "vendors": [
+    "anthropic",
+    "google",
+    "openai",
+    "qwen"
+   ],
+   "models": [
+    "or:anthropic/claude-haiku-5.5",
+    "or:google/gemini-4-argon",
+    "or:openai/gpt-6.1-terra",
+    "or:qwen/qwen3.8-flash"
+   ]
+  },
+  {
+   "uid": "4d24d9bd5a5c7ad7",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"B\"",
+   "key": "\"A\"",
+   "vendors": [
+    "anthropic",
+    "google",
+    "openai",
+    "qwen"
+   ],
+   "models": [
+    "or:anthropic/claude-haiku-5.5",
+    "or:google/gemini-4-argon",
+    "or:openai/gpt-6.1-terra",
+    "or:qwen/qwen3.8-flash"
+   ]
+  },
+  {
+   "uid": "31ba6c331fb01e20",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"B\"",
+   "key": "\"A\"",
+   "vendors": [
+    "anthropic",
+    "google",
+    "openai"
+   ],
+   "models": [
+    "or:anthropic/claude-haiku-5.5",
+    "or:google/gemini-4-argon",
+    "or:openai/gpt-6.1-terra"
+   ]
+  },
+  {
+   "uid": "b0ebd62ea6aa037d",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"A\"",
+   "key": "\"D\"",
+   "vendors": [
+    "anthropic",
+    "google",
+    "openai"
+   ],
+   "models": [
+    "or:anthropic/claude-haiku-5.5",
+    "or:google/gemini-4-argon",
+    "or:openai/gpt-6.1-terra"
+   ]
+  },
+  {
+   "uid": "6953999bea12157c",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"B\"",
+   "key": "\"C\"",
+   "vendors": [
+    "anthropic",
+    "google",
+    "qwen"
+   ],
+   "models": [
+    "or:anthropic/claude-haiku-5.5",
+    "or:google/gemini-4-argon",
+    "or:qwen/qwen3.8-flash"
+   ]
+  },
+  {
+   "uid": "44427bc2a0510889",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"C\"",
+   "key": "\"A\"",
+   "vendors": [
+    "anthropic",
+    "openai",
+    "qwen"
+   ],
+   "models": [
+    "or:anthropic/claude-haiku-5.5",
+    "or:openai/gpt-6-luna",
+    "or:openai/gpt-6.1-terra",
+    "or:qwen/qwen3.8-flash"
+   ]
+  },
+  {
+   "uid": "40acc94735e1cfe4",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"A\"",
+   "key": "\"B\"",
+   "vendors": [
+    "anthropic",
+    "google"
+   ],
+   "models": [
+    "or:anthropic/claude-haiku-5.5",
+    "or:google/gemini-4-argon"
+   ]
+  },
+  {
+   "uid": "168be8911b9d2c57",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"D\"",
+   "key": "\"B\"",
+   "vendors": [
+    "anthropic",
+    "openai"
+   ],
+   "models": [
+    "or:anthropic/claude-haiku-5.5",
+    "or:openai/gpt-6-luna",
+    "or:openai/gpt-6.1-terra"
+   ]
+  },
+  {
+   "uid": "218ef657d44805fe",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"A\"",
+   "key": "\"D\"",
+   "vendors": [
+    "openai",
+    "qwen"
+   ],
+   "models": [
+    "or:openai/gpt-6.1-terra",
+    "or:qwen/qwen3.8-flash"
+   ]
+  },
+  {
+   "uid": "9581708787a9cbc7",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"D\"",
+   "key": "\"B\"",
+   "vendors": [
+    "anthropic",
+    "openai"
+   ],
+   "models": [
+    "or:anthropic/claude-haiku-5.5",
+    "or:openai/gpt-6-luna",
+    "or:openai/gpt-6.1-terra"
+   ]
+  },
+  {
+   "uid": "40acc94735e1cfe4",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"D\"",
+   "key": "\"B\"",
+   "vendors": [
+    "openai",
+    "qwen"
+   ],
+   "models": [
+    "or:openai/gpt-6.1-terra",
+    "or:qwen/qwen3.8-flash"
+   ]
+  },
+  {
+   "uid": "cbfb5a4f0f6d4a72",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"D\"",
+   "key": "\"B\"",
+   "vendors": [
+    "anthropic",
+    "openai"
+   ],
+   "models": [
+    "or:anthropic/claude-haiku-5.5",
+    "or:openai/gpt-6-luna",
+    "or:openai/gpt-6.1-terra"
+   ]
+  },
+  {
+   "uid": "56a3fd2491ca2fba",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"D\"",
+   "key": "\"C\"",
+   "vendors": [
+    "openai",
+    "qwen"
+   ],
+   "models": [
+    "or:openai/gpt-6-luna",
+    "or:openai/gpt-6.1-terra",
+    "or:qwen/qwen3.8-flash"
+   ]
+  },
+  {
+   "uid": "2518c603d71dbd6a",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"B\"",
+   "key": "\"C\"",
+   "vendors": [
+    "anthropic",
+    "qwen"
+   ],
+   "models": [
+    "or:anthropic/claude-haiku-5.5",
+    "or:qwen/qwen3.8-flash"
+   ]
+  },
+  {
+   "uid": "7d91a0e8a55d0442",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"D\"",
+   "key": "\"C\"",
+   "vendors": [
+    "anthropic",
+    "openai"
+   ],
+   "models": [
+    "or:anthropic/claude-haiku-5.5",
+    "or:openai/gpt-6-luna"
+   ]
+  },
+  {
+   "uid": "58fc49b47ede779f",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"B\"",
+   "key": "\"C\"",
+   "vendors": [
+    "anthropic",
+    "openai"
+   ],
+   "models": [
+    "or:anthropic/claude-haiku-5.5",
+    "or:openai/gpt-6-luna"
+   ]
+  },
+  {
+   "uid": "31ba6c331fb01e20",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"C\"",
+   "key": "\"A\"",
+   "vendors": [
+    "openai",
+    "qwen"
+   ],
+   "models": [
+    "or:openai/gpt-6-luna",
+    "or:qwen/qwen3.8-flash"
+   ]
+  }
+ ],
+ "families": [
+  "ext:visulogic"
+ ],
+ "reasoning": null,
+ "item_table": [
+  {
+   "uid": "0f1d257589d6047a",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "A",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 1.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0
+   }
+  },
+  {
+   "uid": "168be8911b9d2c57",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "B",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 0.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0
+   }
+  },
+  {
+   "uid": "17ed46c926f45765",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "C",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 0.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 1.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0
+   }
+  },
+  {
+   "uid": "218ef657d44805fe",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "D",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 0.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "24ef6e21f12e2b1e",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "D",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 1.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0
+   }
+  },
+  {
+   "uid": "2518c603d71dbd6a",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "C",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 0.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "26fadc6b8fac294f",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "D",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 0.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 0.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "31ba6c331fb01e20",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "A",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 0.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 0.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "386856b9b3936bb0",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "C",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0
+   }
+  },
+  {
+   "uid": "40acc94735e1cfe4",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "B",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 0.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 0.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "44427bc2a0510889",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "A",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 0.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "49421fcf695b2d98",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "C",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0
+   }
+  },
+  {
+   "uid": "4d24d9bd5a5c7ad7",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "A",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 0.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 0.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "549ada0ff8f2e8df",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "B",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0
+   }
+  },
+  {
+   "uid": "56a3fd2491ca2fba",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "C",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 0.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "58fc49b47ede779f",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "C",
+   "scores": {
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:google/gemini-4-argon [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0
+   }
+  },
+  {
+   "uid": "5b79826d9ad956aa",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "D",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 1.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0
+   }
+  },
+  {
+   "uid": "6953999bea12157c",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "C",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 0.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "70584cf9bde9f859",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "D",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 1.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "7d91a0e8a55d0442",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "C",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0
+   }
+  },
+  {
+   "uid": "9581708787a9cbc7",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "B",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 0.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "b0ebd62ea6aa037d",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "D",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 0.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 0.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "bcff0924046e460d",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "B",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 1.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0
+   }
+  },
+  {
+   "uid": "cbfb5a4f0f6d4a72",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "B",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 0.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0
+   }
+  },
+  {
+   "uid": "e62330f8714d00b5",
+   "family": "ext:visulogic",
+   "difficulty": 0,
+   "answer": "D",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 0.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 1.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0
+   }
+  }
+ ]
+}

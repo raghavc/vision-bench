@@ -6,7 +6,7 @@ A verifiable **visual-reasoning** evaluation: no preference votes, just tasks wh
 - **Harness.** Runs Claude models in direct or agentic mode (zoom tool, optional server-side code execution), with blind and caption-only controls, k samples, budgets, a full trajectory and image ledger, and resumable runs.
 - **Verifier.** Programmatic checkers for every answer type, including solution checkers that accept any valid optimal answer. LLM judges (rubric, equivalence, failure attribution) are used only where they're needed, and a judge audit measures them against programmatic truth.
 
-Results include clustered error bars, paired significance tests, pass^k reliability, calibration, IRT item analysis and a self-contained HTML report. See [METHODOLOGY.md](METHODOLOGY.md) for the design and the research behind it.
+Results include clustered error bars, paired significance tests, pass^k reliability, calibration, IRT item analysis and a self-contained HTML report. See [METHODOLOGY.md](METHODOLOGY.md) for the design and the research behind it, [ARCHITECTURE.md](ARCHITECTURE.md) for a deep dive on Task, Harness and Verifier, and [FINDINGS.md](FINDINGS.md) for the first live run (5 models, 4 vendors).
 
 ## Setup
 

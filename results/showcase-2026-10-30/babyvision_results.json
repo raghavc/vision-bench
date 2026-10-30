@@ -1,0 +1,1611 @@
+{
+ "run_dir": "/Users/raghav/Desktop/Code/Startups/vision-eval/runs/showcase-babyvision",
+ "subjects": [
+  {
+   "model": "or:anthropic/claude-haiku-5.5",
+   "mode": "direct",
+   "label": "or:anthropic/claude-haiku-5.5 [direct]",
+   "accuracy": {
+    "mean": 0.4,
+    "se": 0.10000000000000002,
+    "ci95": [
+     0.2,
+     0.6
+    ],
+    "n_items": 25,
+    "n_clusters": 25,
+    "n_attempts": 25
+   },
+   "partial_credit": {
+    "mean": 0.4,
+    "se": 0.10000000000000002,
+    "ci95": [
+     0.2,
+     0.6
+    ],
+    "n_items": 25,
+    "n_clusters": 25,
+    "n_attempts": 25
+   },
+   "pass_k": {
+    "pass@1": 0.4,
+    "pass^1": 0.4
+   },
+   "outcomes": {
+    "correct": 10,
+    "incorrect": 15
+   },
+   "by_family": {
+    "ext:babyvision": {
+     "mean": 0.4,
+     "se": 0.10000000000000002,
+     "ci95": [
+      0.2,
+      0.6
+     ],
+     "n_items": 25,
+     "n_clusters": 25,
+     "n_attempts": 25,
+     "chance": 0.15666666666666665,
+     "chance_normalized": 0.2885375494071147
+    }
+   },
+   "by_difficulty": {
+    "0": {
+     "mean": 0.4,
+     "se": 0.10000000000000002,
+     "ci95": [
+      0.2,
+      0.6
+     ],
+     "n_items": 25,
+     "n_clusters": 25,
+     "n_attempts": 25
+    }
+   },
+   "by_family_difficulty": {
+    "ext:babyvision": {
+     "0": 0.4
+    }
+   },
+   "calibration": {
+    "n": 25,
+    "ece": 0.15,
+    "brier": 0.218028,
+    "mean_conf": 0.4868,
+    "accuracy": 0.4,
+    "overconfidence": 0.08679999999999999,
+    "bins": [
+     {
+      "bin": [
+       0.0,
+       0.1
+      ],
+      "n": 2,
+      "conf": 0.065,
+      "acc": 0.0
+     },
+     {
+      "bin": [
+       0.1,
+       0.2
+      ],
+      "n": 1,
+      "conf": 0.15,
+      "acc": 0.0
+     },
+     {
+      "bin": [
+       0.2,
+       0.30000000000000004
+      ],
+      "n": 5,
+      "conf": 0.28,
+      "acc": 0.2
+     },
+     {
+      "bin": [
+       0.30000000000000004,
+       0.4
+      ],
+      "n": 1,
+      "conf": 0.35,
+      "acc": 1.0
+     },
+     {
+      "bin": [
+       0.4,
+       0.5
+      ],
+      "n": 1,
+      "conf": 0.4,
+      "acc": 0.0
+     },
+     {
+      "bin": [
+       0.5,
+       0.6000000000000001
+      ],
+      "n": 5,
+      "conf": 0.5199999999999999,
+      "acc": 0.4
+     },
+     {
+      "bin": [
+       0.6000000000000001,
+       0.7000000000000001
+      ],
+      "n": 3,
+      "conf": 0.62,
+      "acc": 0.6666666666666666
+     },
+     {
+      "bin": [
+       0.7000000000000001,
+       0.8
+      ],
+      "n": 4,
+      "conf": 0.72,
+      "acc": 0.5
+     },
+     {
+      "bin": [
+       0.8,
+       0.9
+      ],
+      "n": 3,
+      "conf": 0.8000000000000002,
+      "acc": 0.6666666666666666
+     }
+    ]
+   },
+   "cost": {
+    "total_usd": 0.0318619,
+    "usd_per_attempt": 0.0012744759999999999,
+    "usd_per_correct": 0.0031861899999999998,
+    "mean_output_tokens": 2408.84,
+    "latency_p50": 12.066505875030998,
+    "latency_p90": 21.44378133323044,
+    "mean_tool_calls": 0.0
+   },
+   "error_attribution": {}
+  },
+  {
+   "model": "or:google/gemini-4-argon",
+   "mode": "direct",
+   "label": "or:google/gemini-4-argon [direct]",
+   "accuracy": {
+    "mean": 0.88,
+    "se": 0.06633249580710801,
+    "ci95": [
+     0.72,
+     1.0
+    ],
+    "n_items": 25,
+    "n_clusters": 25,
+    "n_attempts": 25
+   },
+   "partial_credit": {
+    "mean": 0.88,
+    "se": 0.06633249580710801,
+    "ci95": [
+     0.72,
+     1.0
+    ],
+    "n_items": 25,
+    "n_clusters": 25,
+    "n_attempts": 25
+   },
+   "pass_k": {
+    "pass@1": 0.88,
+    "pass^1": 0.88
+   },
+   "outcomes": {
+    "correct": 22,
+    "incorrect": 3
+   },
+   "by_family": {
+    "ext:babyvision": {
+     "mean": 0.88,
+     "se": 0.06633249580710801,
+     "ci95": [
+      0.76,
+      1.0
+     ],
+     "n_items": 25,
+     "n_clusters": 25,
+     "n_attempts": 25,
+     "chance": 0.15666666666666665,
+     "chance_normalized": 0.857707509881423
+    }
+   },
+   "by_difficulty": {
+    "0": {
+     "mean": 0.88,
+     "se": 0.06633249580710801,
+     "ci95": [
+      0.72,
+      1.0
+     ],
+     "n_items": 25,
+     "n_clusters": 25,
+     "n_attempts": 25
+    }
+   },
+   "by_family_difficulty": {
+    "ext:babyvision": {
+     "0": 0.88
+    }
+   },
+   "calibration": {
+    "n": 25,
+    "ece": 0.1191999999999999,
+    "brier": 0.113144,
+    "mean_conf": 0.9872,
+    "accuracy": 0.88,
+    "overconfidence": 0.10719999999999996,
+    "bins": [
+     {
+      "bin": [
+       0.8,
+       0.9
+      ],
+      "n": 1,
+      "conf": 0.85,
+      "acc": 1.0
+     },
+     {
+      "bin": [
+       0.9,
+       1.0
+      ],
+      "n": 24,
+      "conf": 0.9929166666666666,
+      "acc": 0.875
+     }
+    ]
+   },
+   "cost": {
+    "total_usd": 0.295784,
+    "usd_per_attempt": 0.011831359999999999,
+    "usd_per_correct": 0.013444727272727273,
+    "mean_output_tokens": 928.52,
+    "latency_p50": 16.131526875018608,
+    "latency_p90": 37.047324775217575,
+    "mean_tool_calls": 0.0
+   },
+   "error_attribution": {}
+  },
+  {
+   "model": "or:nvidia/nemotron-3.5-super-vl:free",
+   "mode": "direct",
+   "label": "or:nvidia/nemotron-3.5-super-vl:free [direct]",
+   "accuracy": {
+    "mean": 0.4166666666666667,
+    "se": 0.10279899245732683,
+    "ci95": [
+     0.20833333333333334,
+     0.625
+    ],
+    "n_items": 24,
+    "n_clusters": 24,
+    "n_attempts": 24
+   },
+   "partial_credit": {
+    "mean": 0.4166666666666667,
+    "se": 0.10279899245732683,
+    "ci95": [
+     0.20833333333333334,
+     0.625
+    ],
+    "n_items": 24,
+    "n_clusters": 24,
+    "n_attempts": 24
+   },
+   "pass_k": {
+    "pass@1": 0.4166666666666667,
+    "pass^1": 0.4166666666666667
+   },
+   "outcomes": {
+    "incorrect": 12,
+    "correct": 10,
+    "unparseable": 2
+   },
+   "by_family": {
+    "ext:babyvision": {
+     "mean": 0.4166666666666667,
+     "se": 0.10279899245732683,
+     "ci95": [
+      0.20833333333333334,
+      0.625
+     ],
+     "n_items": 24,
+     "n_clusters": 24,
+     "n_attempts": 24,
+     "chance": 0.16319444444444445,
+     "chance_normalized": 0.3029045643153527
+    }
+   },
+   "by_difficulty": {
+    "0": {
+     "mean": 0.4166666666666667,
+     "se": 0.10279899245732683,
+     "ci95": [
+      0.2489583333333334,
+      0.625
+     ],
+     "n_items": 24,
+     "n_clusters": 24,
+     "n_attempts": 24
+    }
+   },
+   "by_family_difficulty": {
+    "ext:babyvision": {
+     "0": 0.4166666666666667
+    }
+   },
+   "calibration": {
+    "n": 22,
+    "ece": 0.4786363636363635,
+    "brier": 0.44695,
+    "mean_conf": 0.8922727272727272,
+    "accuracy": 0.45454545454545453,
+    "overconfidence": 0.4377272727272727,
+    "bins": [
+     {
+      "bin": [
+       0.5,
+       0.6000000000000001
+      ],
+      "n": 1,
+      "conf": 0.55,
+      "acc": 1.0
+     },
+     {
+      "bin": [
+       0.8,
+       0.9
+      ],
+      "n": 7,
+      "conf": 0.8428571428571427,
+      "acc": 0.14285714285714285
+     },
+     {
+      "bin": [
+       0.9,
+       1.0
+      ],
+      "n": 14,
+      "conf": 0.9414285714285713,
+      "acc": 0.5714285714285714
+     }
+    ]
+   },
+   "cost": {
+    "total_usd": 0.0,
+    "usd_per_attempt": 0.0,
+    "usd_per_correct": 0.0,
+    "mean_output_tokens": 11906.041666666666,
+    "latency_p50": 70.99876229200163,
+    "latency_p90": 175.97724321263377,
+    "mean_tool_calls": 0.0
+   },
+   "error_attribution": {}
+  },
+  {
+   "model": "or:openai/gpt-6-luna",
+   "mode": "direct",
+   "label": "or:openai/gpt-6-luna [direct]",
+   "accuracy": {
+    "mean": 0.6,
+    "se": 0.10000000000000003,
+    "ci95": [
+     0.4,
+     0.8
+    ],
+    "n_items": 25,
+    "n_clusters": 25,
+    "n_attempts": 25
+   },
+   "partial_credit": {
+    "mean": 0.6,
+    "se": 0.10000000000000003,
+    "ci95": [
+     0.4,
+     0.8
+    ],
+    "n_items": 25,
+    "n_clusters": 25,
+    "n_attempts": 25
+   },
+   "pass_k": {
+    "pass@1": 0.6,
+    "pass^1": 0.6
+   },
+   "outcomes": {
+    "correct": 15,
+    "incorrect": 10
+   },
+   "by_family": {
+    "ext:babyvision": {
+     "mean": 0.6,
+     "se": 0.10000000000000003,
+     "ci95": [
+      0.4,
+      0.76
+     ],
+     "n_items": 25,
+     "n_clusters": 25,
+     "n_attempts": 25,
+     "chance": 0.15666666666666665,
+     "chance_normalized": 0.525691699604743
+    }
+   },
+   "by_difficulty": {
+    "0": {
+     "mean": 0.6,
+     "se": 0.10000000000000003,
+     "ci95": [
+      0.4,
+      0.8
+     ],
+     "n_items": 25,
+     "n_clusters": 25,
+     "n_attempts": 25
+    }
+   },
+   "by_family_difficulty": {
+    "ext:babyvision": {
+     "0": 0.6
+    }
+   },
+   "calibration": {
+    "n": 25,
+    "ece": 0.3332,
+    "brier": 0.30506,
+    "mean_conf": 0.866,
+    "accuracy": 0.6,
+    "overconfidence": 0.266,
+    "bins": [
+     {
+      "bin": [
+       0.5,
+       0.6000000000000001
+      ],
+      "n": 2,
+      "conf": 0.58,
+      "acc": 1.0
+     },
+     {
+      "bin": [
+       0.6000000000000001,
+       0.7000000000000001
+      ],
+      "n": 1,
+      "conf": 0.62,
+      "acc": 0.0
+     },
+     {
+      "bin": [
+       0.7000000000000001,
+       0.8
+      ],
+      "n": 4,
+      "conf": 0.75,
+      "acc": 0.25
+     },
+     {
+      "bin": [
+       0.8,
+       0.9
+      ],
+      "n": 4,
+      "conf": 0.835,
+      "acc": 0.5
+     },
+     {
+      "bin": [
+       0.9,
+       1.0
+      ],
+      "n": 14,
+      "conf": 0.9664285714285714,
+      "acc": 0.7142857142857143
+     }
+    ]
+   },
+   "cost": {
+    "total_usd": 0.041891325,
+    "usd_per_attempt": 0.001675653,
+    "usd_per_correct": 0.002792755,
+    "mean_output_tokens": 3226.28,
+    "latency_p50": 32.056478333019186,
+    "latency_p90": 53.600892625015696,
+    "mean_tool_calls": 0.0
+   },
+   "error_attribution": {}
+  },
+  {
+   "model": "or:openai/gpt-6.1-terra",
+   "mode": "direct",
+   "label": "or:openai/gpt-6.1-terra [direct]",
+   "accuracy": {
+    "mean": 0.92,
+    "se": 0.055377492419453826,
+    "ci95": [
+     0.8,
+     1.0
+    ],
+    "n_items": 25,
+    "n_clusters": 25,
+    "n_attempts": 25
+   },
+   "partial_credit": {
+    "mean": 0.92,
+    "se": 0.055377492419453826,
+    "ci95": [
+     0.8,
+     1.0
+    ],
+    "n_items": 25,
+    "n_clusters": 25,
+    "n_attempts": 25
+   },
+   "pass_k": {
+    "pass@1": 0.92,
+    "pass^1": 0.92
+   },
+   "outcomes": {
+    "correct": 23,
+    "incorrect": 2
+   },
+   "by_family": {
+    "ext:babyvision": {
+     "mean": 0.92,
+     "se": 0.055377492419453826,
+     "ci95": [
+      0.8,
+      1.0
+     ],
+     "n_items": 25,
+     "n_clusters": 25,
+     "n_attempts": 25,
+     "chance": 0.15666666666666665,
+     "chance_normalized": 0.9051383399209487
+    }
+   },
+   "by_difficulty": {
+    "0": {
+     "mean": 0.92,
+     "se": 0.055377492419453826,
+     "ci95": [
+      0.8,
+      1.0
+     ],
+     "n_items": 25,
+     "n_clusters": 25,
+     "n_attempts": 25
+    }
+   },
+   "by_family_difficulty": {
+    "ext:babyvision": {
+     "0": 0.92
+    }
+   },
+   "calibration": {
+    "n": 25,
+    "ece": 0.05800000000000015,
+    "brier": 0.03682,
+    "mean_conf": 0.9259999999999999,
+    "accuracy": 0.92,
+    "overconfidence": 0.005999999999999894,
+    "bins": [
+     {
+      "bin": [
+       0.1,
+       0.2
+      ],
+      "n": 1,
+      "conf": 0.1,
+      "acc": 0.0
+     },
+     {
+      "bin": [
+       0.5,
+       0.6000000000000001
+      ],
+      "n": 1,
+      "conf": 0.6,
+      "acc": 1.0
+     },
+     {
+      "bin": [
+       0.8,
+       0.9
+      ],
+      "n": 2,
+      "conf": 0.85,
+      "acc": 0.5
+     },
+     {
+      "bin": [
+       0.9,
+       1.0
+      ],
+      "n": 21,
+      "conf": 0.9880952380952379,
+      "acc": 1.0
+     }
+    ]
+   },
+   "cost": {
+    "total_usd": 0.10847325,
+    "usd_per_attempt": 0.0043389299999999995,
+    "usd_per_correct": 0.004716228260869565,
+    "mean_output_tokens": 742.76,
+    "latency_p50": 7.669118040998001,
+    "latency_p90": 22.968304733210243,
+    "mean_tool_calls": 0.0
+   },
+   "error_attribution": {}
+  },
+  {
+   "model": "or:qwen/qwen3.8-flash",
+   "mode": "direct",
+   "label": "or:qwen/qwen3.8-flash [direct]",
+   "accuracy": {
+    "mean": 0.56,
+    "se": 0.10132456102380442,
+    "ci95": [
+     0.36,
+     0.76
+    ],
+    "n_items": 25,
+    "n_clusters": 25,
+    "n_attempts": 25
+   },
+   "partial_credit": {
+    "mean": 0.56,
+    "se": 0.10132456102380442,
+    "ci95": [
+     0.36,
+     0.76
+    ],
+    "n_items": 25,
+    "n_clusters": 25,
+    "n_attempts": 25
+   },
+   "pass_k": {
+    "pass@1": 0.56,
+    "pass^1": 0.56
+   },
+   "outcomes": {
+    "correct": 14,
+    "incorrect": 11
+   },
+   "by_family": {
+    "ext:babyvision": {
+     "mean": 0.56,
+     "se": 0.10132456102380442,
+     "ci95": [
+      0.36,
+      0.76
+     ],
+     "n_items": 25,
+     "n_clusters": 25,
+     "n_attempts": 25,
+     "chance": 0.15666666666666665,
+     "chance_normalized": 0.47826086956521746
+    }
+   },
+   "by_difficulty": {
+    "0": {
+     "mean": 0.56,
+     "se": 0.10132456102380442,
+     "ci95": [
+      0.36,
+      0.76
+     ],
+     "n_items": 25,
+     "n_clusters": 25,
+     "n_attempts": 25
+    }
+   },
+   "by_family_difficulty": {
+    "ext:babyvision": {
+     "0": 0.56
+    }
+   },
+   "calibration": {
+    "n": 25,
+    "ece": 0.24560000000000004,
+    "brier": 0.20986400000000002,
+    "mean_conf": 0.7296,
+    "accuracy": 0.56,
+    "overconfidence": 0.16959999999999997,
+    "bins": [
+     {
+      "bin": [
+       0.2,
+       0.30000000000000004
+      ],
+      "n": 2,
+      "conf": 0.25,
+      "acc": 0.0
+     },
+     {
+      "bin": [
+       0.30000000000000004,
+       0.4
+      ],
+      "n": 1,
+      "conf": 0.35,
+      "acc": 1.0
+     },
+     {
+      "bin": [
+       0.5,
+       0.6000000000000001
+      ],
+      "n": 5,
+      "conf": 0.5700000000000001,
+      "acc": 0.0
+     },
+     {
+      "bin": [
+       0.6000000000000001,
+       0.7000000000000001
+      ],
+      "n": 1,
+      "conf": 0.7,
+      "acc": 1.0
+     },
+     {
+      "bin": [
+       0.7000000000000001,
+       0.8
+      ],
+      "n": 3,
+      "conf": 0.7200000000000001,
+      "acc": 0.6666666666666666
+     },
+     {
+      "bin": [
+       0.8,
+       0.9
+      ],
+      "n": 4,
+      "conf": 0.8325,
+      "acc": 0.5
+     },
+     {
+      "bin": [
+       0.9,
+       1.0
+      ],
+      "n": 9,
+      "conf": 0.9277777777777777,
+      "acc": 0.8888888888888888
+     }
+    ]
+   },
+   "cost": {
+    "total_usd": 0.10066123,
+    "usd_per_attempt": 0.004026449200000001,
+    "usd_per_correct": 0.007190087857142857,
+    "mean_output_tokens": 8387.96,
+    "latency_p50": 118.66849108302267,
+    "latency_p90": 480.4772394750152,
+    "mean_tool_calls": 0.0
+   },
+   "error_attribution": {}
+  }
+ ],
+ "comparisons": [
+  {
+   "diff": -0.48,
+   "se": 0.10198039027185572,
+   "ci95": [
+    -0.68,
+    -0.28
+   ],
+   "p_value": 0.001,
+   "n_items": 25,
+   "n_clusters": 25,
+   "item_correlation": 0.3015113445777637,
+   "mde_80pct_power": 0.285545092761196,
+   "a": "or:anthropic/claude-haiku-5.5 [direct]",
+   "b": "or:google/gemini-4-argon [direct]",
+   "p_holm": 0.012
+  },
+  {
+   "diff": 0.0,
+   "se": 0.1203858530857692,
+   "ci95": [
+    -0.25,
+    0.25
+   ],
+   "p_value": 1.0,
+   "n_items": 24,
+   "n_clusters": 24,
+   "item_correlation": 0.31428571428571433,
+   "mde_80pct_power": 0.3370803886401537,
+   "a": "or:anthropic/claude-haiku-5.5 [direct]",
+   "b": "or:nvidia/nemotron-3.5-super-vl:free [direct]",
+   "p_holm": 1.0
+  },
+  {
+   "diff": -0.2,
+   "se": 0.11547005383792516,
+   "ci95": [
+    -0.4,
+    0.04
+   ],
+   "p_value": 0.1692,
+   "n_items": 25,
+   "n_clusters": 25,
+   "item_correlation": 0.3333333333333333,
+   "mde_80pct_power": 0.3233161507461904,
+   "a": "or:anthropic/claude-haiku-5.5 [direct]",
+   "b": "or:openai/gpt-6-luna [direct]",
+   "p_holm": 1.0
+  },
+  {
+   "diff": -0.52,
+   "se": 0.10198039027185574,
+   "ci95": [
+    -0.72,
+    -0.32
+   ],
+   "p_value": 0.0002,
+   "n_items": 25,
+   "n_clusters": 25,
+   "item_correlation": 0.24077170617153848,
+   "mde_80pct_power": 0.28554509276119605,
+   "a": "or:anthropic/claude-haiku-5.5 [direct]",
+   "b": "or:openai/gpt-6.1-terra [direct]",
+   "p_holm": 0.003
+  },
+  {
+   "diff": -0.16,
+   "se": 0.11075498483890762,
+   "ci95": [
+    -0.36,
+    0.08
+   ],
+   "p_value": 0.2876,
+   "n_items": 25,
+   "n_clusters": 25,
+   "item_correlation": 0.3947710169758614,
+   "mde_80pct_power": 0.31011395754894133,
+   "a": "or:anthropic/claude-haiku-5.5 [direct]",
+   "b": "or:qwen/qwen3.8-flash [direct]",
+   "p_holm": 1.0
+  },
+  {
+   "diff": 0.4583333333333333,
+   "se": 0.10389457216622949,
+   "ci95": [
+    0.25,
+    0.6666666666666666
+   ],
+   "p_value": 0.0008,
+   "n_items": 24,
+   "n_clusters": 24,
+   "item_correlation": 0.31943828249997,
+   "mde_80pct_power": 0.29090480206544256,
+   "a": "or:google/gemini-4-argon [direct]",
+   "b": "or:nvidia/nemotron-3.5-super-vl:free [direct]",
+   "p_holm": 0.010400000000000001
+  },
+  {
+   "diff": 0.28,
+   "se": 0.1083205120618128,
+   "ci95": [
+    0.08,
+    0.48
+   ],
+   "p_value": 0.0428,
+   "n_items": 25,
+   "n_clusters": 25,
+   "item_correlation": 0.2010075630518425,
+   "mde_80pct_power": 0.30329743377307583,
+   "a": "or:google/gemini-4-argon [direct]",
+   "b": "or:openai/gpt-6-luna [direct]",
+   "p_holm": 0.3424
+  },
+  {
+   "diff": -0.04,
+   "se": 0.07023769168568493,
+   "ci95": [
+    -0.16,
+    0.08
+   ],
+   "p_value": 1.0,
+   "n_items": 25,
+   "n_clusters": 25,
+   "item_correlation": 0.34482815410429796,
+   "mde_80pct_power": 0.1966655367199178,
+   "a": "or:google/gemini-4-argon [direct]",
+   "b": "or:openai/gpt-6.1-terra [direct]",
+   "p_holm": 1.0
+  },
+  {
+   "diff": 0.32,
+   "se": 0.09521904571390467,
+   "ci95": [
+    0.16,
+    0.52
+   ],
+   "p_value": 0.0074,
+   "n_items": 25,
+   "n_clusters": 25,
+   "item_correlation": 0.416597790450531,
+   "mde_80pct_power": 0.26661332799893306,
+   "a": "or:google/gemini-4-argon [direct]",
+   "b": "or:qwen/qwen3.8-flash [direct]",
+   "p_holm": 0.07400000000000001
+  },
+  {
+   "diff": -0.20833333333333334,
+   "se": 0.12007193898409804,
+   "ci95": [
+    -0.4166666666666667,
+    0.041666666666666664
+   ],
+   "p_value": 0.182,
+   "n_items": 24,
+   "n_clusters": 24,
+   "item_correlation": 0.3055050463303894,
+   "mde_80pct_power": 0.3362014291554745,
+   "a": "or:nvidia/nemotron-3.5-super-vl:free [direct]",
+   "b": "or:openai/gpt-6-luna [direct]",
+   "p_holm": 1.0
+  },
+  {
+   "diff": -0.5,
+   "se": 0.10425720702853739,
+   "ci95": [
+    -0.7083333333333334,
+    -0.2916666666666667
+   ],
+   "p_value": 0.0004,
+   "n_items": 24,
+   "n_clusters": 24,
+   "item_correlation": 0.25482359571881275,
+   "mde_80pct_power": 0.29192017967990463,
+   "a": "or:nvidia/nemotron-3.5-super-vl:free [direct]",
+   "b": "or:openai/gpt-6.1-terra [direct]",
+   "p_holm": 0.0056
+  },
+  {
+   "diff": -0.16666666666666666,
+   "se": 0.11526067913468743,
+   "ci95": [
+    -0.4166666666666667,
+    0.041666666666666664
+   ],
+   "p_value": 0.3004,
+   "n_items": 24,
+   "n_clusters": 24,
+   "item_correlation": 0.37142857142857155,
+   "mde_80pct_power": 0.3227299015771248,
+   "a": "or:nvidia/nemotron-3.5-super-vl:free [direct]",
+   "b": "or:qwen/qwen3.8-flash [direct]",
+   "p_holm": 1.0
+  },
+  {
+   "diff": -0.32,
+   "se": 0.11135528725660045,
+   "ci95": [
+    -0.52,
+    -0.12
+   ],
+   "p_value": 0.0216,
+   "n_items": 25,
+   "n_clusters": 25,
+   "item_correlation": 0.060192926542884696,
+   "mde_80pct_power": 0.3117948043184812,
+   "a": "or:openai/gpt-6-luna [direct]",
+   "b": "or:openai/gpt-6.1-terra [direct]",
+   "p_holm": 0.19440000000000002
+  },
+  {
+   "diff": 0.04,
+   "se": 0.10770329614269007,
+   "ci95": [
+    -0.16,
+    0.24
+   ],
+   "p_value": 1.0,
+   "n_items": 25,
+   "n_clusters": 25,
+   "item_correlation": 0.42766860172384974,
+   "mde_80pct_power": 0.30156922919953216,
+   "a": "or:openai/gpt-6-luna [direct]",
+   "b": "or:qwen/qwen3.8-flash [direct]",
+   "p_holm": 1.0
+  },
+  {
+   "diff": 0.36,
+   "se": 0.09797958971132713,
+   "ci95": [
+    0.16,
+    0.56
+   ],
+   "p_value": 0.0036,
+   "n_items": 25,
+   "n_clusters": 25,
+   "item_correlation": 0.33267391956523024,
+   "mde_80pct_power": 0.2743428511917159,
+   "a": "or:openai/gpt-6.1-terra [direct]",
+   "b": "or:qwen/qwen3.8-flash [direct]",
+   "p_holm": 0.039599999999999996
+  }
+ ],
+ "n_rows": 149,
+ "rank_spread": {
+  "or:anthropic/claude-haiku-5.5 [direct]": [
+   4,
+   6
+  ],
+  "or:google/gemini-4-argon [direct]": [
+   1,
+   2
+  ],
+  "or:nvidia/nemotron-3.5-super-vl:free [direct]": [
+   3,
+   6
+  ],
+  "or:openai/gpt-6-luna [direct]": [
+   3,
+   5
+  ],
+  "or:openai/gpt-6.1-terra [direct]": [
+   1,
+   2
+  ],
+  "or:qwen/qwen3.8-flash [direct]": [
+   3,
+   6
+  ]
+ },
+ "irt": {
+  "theta": {
+   "or:anthropic/claude-haiku-5.5 [direct]": -1.7592078119096715,
+   "or:google/gemini-4-argon [direct]": 1.9919016210497775,
+   "or:nvidia/nemotron-3.5-super-vl:free [direct]": -1.7395693009940947,
+   "or:openai/gpt-6-luna [direct]": -0.38654578100014203,
+   "or:openai/gpt-6.1-terra [direct]": 2.55599874536483,
+   "or:qwen/qwen3.8-flash [direct]": -0.6625774725106998
+  },
+  "family_mean_difficulty": {
+   "ext:babyvision": -0.9311964505479798
+  },
+  "suspect_items": [
+   {
+    "uid": "ba7a6b814e8e398b",
+    "best_subject": "or:openai/gpt-6.1-terra [direct]",
+    "best_acc": 0.0,
+    "max_other_acc": 1.0,
+    "difficulty_b": 0.9654575081003067
+   }
+  ]
+ },
+ "blind_solvable_items": [],
+ "consensus_wrong_items": [
+  {
+   "uid": "1245fa4f70c55a13",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"B\"",
+   "key": "\"A\"",
+   "vendors": [
+    "google",
+    "nvidia",
+    "openai",
+    "qwen"
+   ],
+   "models": [
+    "or:google/gemini-4-argon",
+    "or:nvidia/nemotron-3.5-super-vl:free",
+    "or:openai/gpt-6-luna",
+    "or:qwen/qwen3.8-flash"
+   ]
+  },
+  {
+   "uid": "a39a6e7ab42248a0",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"B\"",
+   "key": "\"D\"",
+   "vendors": [
+    "anthropic",
+    "google",
+    "nvidia"
+   ],
+   "models": [
+    "or:anthropic/claude-haiku-5.5",
+    "or:google/gemini-4-argon",
+    "or:nvidia/nemotron-3.5-super-vl:free"
+   ]
+  },
+  {
+   "uid": "6fbab9c82d7c1472",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"A\"",
+   "key": "\"B\"",
+   "vendors": [
+    "anthropic",
+    "nvidia",
+    "qwen"
+   ],
+   "models": [
+    "or:anthropic/claude-haiku-5.5",
+    "or:nvidia/nemotron-3.5-super-vl:free",
+    "or:qwen/qwen3.8-flash"
+   ]
+  },
+  {
+   "uid": "ba7a6b814e8e398b",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"A\"",
+   "key": "\"C\"",
+   "vendors": [
+    "anthropic",
+    "openai"
+   ],
+   "models": [
+    "or:anthropic/claude-haiku-5.5",
+    "or:openai/gpt-6.1-terra"
+   ]
+  },
+  {
+   "uid": "e613543a36215278",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"A\"",
+   "key": "\"F\"",
+   "vendors": [
+    "anthropic",
+    "nvidia"
+   ],
+   "models": [
+    "or:anthropic/claude-haiku-5.5",
+    "or:nvidia/nemotron-3.5-super-vl:free"
+   ]
+  },
+  {
+   "uid": "a068da95f753de57",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"C\"",
+   "key": "\"A\"",
+   "vendors": [
+    "anthropic",
+    "nvidia"
+   ],
+   "models": [
+    "or:anthropic/claude-haiku-5.5",
+    "or:nvidia/nemotron-3.5-super-vl:free"
+   ]
+  },
+  {
+   "uid": "49f95e4730be38af",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"C\"",
+   "key": "\"A\"",
+   "vendors": [
+    "nvidia",
+    "openai"
+   ],
+   "models": [
+    "or:nvidia/nemotron-3.5-super-vl:free",
+    "or:openai/gpt-6-luna"
+   ]
+  },
+  {
+   "uid": "8a35ffad2e9a9529",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "shared_wrong_answer": "24.0",
+   "key": "22.0",
+   "vendors": [
+    "openai",
+    "qwen"
+   ],
+   "models": [
+    "or:openai/gpt-6-luna",
+    "or:qwen/qwen3.8-flash"
+   ]
+  },
+  {
+   "uid": "0ee013d616042461",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "shared_wrong_answer": "17.0",
+   "key": "21.0",
+   "vendors": [
+    "openai",
+    "qwen"
+   ],
+   "models": [
+    "or:openai/gpt-6-luna",
+    "or:qwen/qwen3.8-flash"
+   ]
+  },
+  {
+   "uid": "ba7a6b814e8e398b",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "shared_wrong_answer": "\"B\"",
+   "key": "\"C\"",
+   "vendors": [
+    "nvidia",
+    "qwen"
+   ],
+   "models": [
+    "or:nvidia/nemotron-3.5-super-vl:free",
+    "or:qwen/qwen3.8-flash"
+   ]
+  }
+ ],
+ "families": [
+  "ext:babyvision"
+ ],
+ "reasoning": null,
+ "item_table": [
+  {
+   "uid": "0bbe47938a2e9f06",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": "3-Gem,1-Fan,2-Crab,4-Skull",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 0.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 0.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "0ee013d616042461",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": 21.0,
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "1245fa4f70c55a13",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": "A",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 0.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "2f75f8e0bca66fea",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": 34.0,
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 1.0
+   }
+  },
+  {
+   "uid": "49f95e4730be38af",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": "A",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 1.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "553685d101bce5c4",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": "B",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 1.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 1.0
+   }
+  },
+  {
+   "uid": "5a60d19d0e2ae9ec",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": "A",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 1.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "6f11b2f830314467",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": "(11,4)",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "6fbab9c82d7c1472",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": "B",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "7516b20bbb694f22",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": 27.0,
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 1.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 1.0
+   }
+  },
+  {
+   "uid": "76cb42dc62bf5d82",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": "1-B,2-D,3-A,4-C",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 1.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 1.0
+   }
+  },
+  {
+   "uid": "827bead42f85af99",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": "3, 5, 6",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "8355fc2ce77d8c93",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": 22.0,
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 1.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "89552f64507f6d17",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": "4, 6, 5, 5",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "8a35ffad2e9a9529",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": 22.0,
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 1.0
+   }
+  },
+  {
+   "uid": "9e0a2aa9a78ec6eb",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": "C",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 1.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 1.0
+   }
+  },
+  {
+   "uid": "a068da95f753de57",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": "A",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "a39a6e7ab42248a0",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": "D",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 0.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "ba7a6b814e8e398b",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": "C",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 0.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 0.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "ce35650b9b369d62",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": "2-8, 1-3, 5-6, 4-7",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 0.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 1.0
+   }
+  },
+  {
+   "uid": "cf53c1ff2683f262",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": "B",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 1.0
+   }
+  },
+  {
+   "uid": "d71bc32b4d90f52f",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": "E",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 1.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 1.0
+   }
+  },
+  {
+   "uid": "e613543a36215278",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": "F",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 0.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "f57039c0849f992e",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": "B",
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 1.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 0.0
+   }
+  },
+  {
+   "uid": "fcde8dfa07ab09e2",
+   "family": "ext:babyvision",
+   "difficulty": 0,
+   "answer": 24.0,
+   "scores": {
+    "or:google/gemini-4-argon [direct|vision]": 1.0,
+    "or:openai/gpt-6.1-terra [direct|vision]": 1.0,
+    "or:anthropic/claude-haiku-5.5 [direct|vision]": 1.0,
+    "or:openai/gpt-6-luna [direct|vision]": 1.0,
+    "or:qwen/qwen3.8-flash [direct|vision]": 1.0,
+    "or:nvidia/nemotron-3.5-super-vl:free [direct|vision]": 1.0
+   }
+  }
+ ]
+}

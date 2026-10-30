@@ -34,7 +34,8 @@ async def judge_audit(run_dir: Path, settings: Settings, n: int = 150, seed: int
     attempts = {Attempt.from_record(r).key: Attempt.from_record(r) for r in _jsonl(run_dir / "attempts.jsonl")}
     verdicts = [v for v in _jsonl(run_dir / "verdicts.jsonl")
                 if v["verifier"] == "programmatic" and v["outcome"] in ("correct", "incorrect")
-                and v["attempt_key"] in attempts and attempts[v["attempt_key"]].final_text]
+                and v["attempt_key"] in attempts and attempts[v["attempt_key"]].final_text
+                and v["uid"] in items]  # items retired by a generator version bump are skipped
     rnd = random.Random(seed)
     pos = [v for v in verdicts if v["outcome"] == "correct"]
     neg = [v for v in verdicts if v["outcome"] == "incorrect"]
@@ -91,7 +92,8 @@ async def critique_consistency(run_dir: Path, settings: Settings, n: int = 40, s
     for it in items.values():
         it.load_images(Path(manifest["dataset"]))
     attempts = {Attempt.from_record(r).key: Attempt.from_record(r) for r in _jsonl(run_dir / "attempts.jsonl")}
-    crits = [c for c in _jsonl(run_dir / "critiques.jsonl") if "metrics" in c and c["attempt_key"] in attempts]
+    crits = [c for c in _jsonl(run_dir / "critiques.jsonl") if "metrics" in c and c["attempt_key"] in attempts
+             and c["uid"] in items]
     random.Random(seed).shuffle(crits)
     crits = crits[:n]
     judges = Judges(Claude(settings), settings)

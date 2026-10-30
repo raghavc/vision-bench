@@ -59,6 +59,10 @@ def pct(x: float | None, digits: int = 1) -> str:
     return f"{100 * x:.{digits}f}%"
 
 
+def _short(label: str) -> str:
+    return label.partition(" [")[0].removeprefix("or:").split("/")[-1]
+
+
 def usd(x: float | None) -> str:
     return "–" if not x else f"${x:.3f}"
 
@@ -198,6 +202,9 @@ def legend(labels: list[str], start: int = 0) -> str:
 def render(results: dict[str, Any], out_path: Path, title: str = "VisionBench report") -> Path:
     subs = results["subjects"]
     fams = results.get("families", [])
+    for s_ in subs:
+        s_["label_full"] = s_["label"]
+        s_["label"] = s_.get("short", s_["label"])
     labels = [s["label"] for s in subs]
     css = CSS.replace("%LIGHT%", _vars(SERIES_LIGHT)).replace("%DARK%", _vars(SERIES_DARK))
     h: list[str] = [f"<!DOCTYPE html><html lang='en'><head><meta charset='utf-8'><title>{esc(title)}</title>"
@@ -219,6 +226,9 @@ def render(results: dict[str, Any], out_path: Path, title: str = "VisionBench re
         h.append(f"<div class='kpi'><div class='v'>{best['accuracy']['n_items']}</div><div class='l'>items "
                  f"({best['accuracy']['n_clusters']} independent problems)</div></div></div>")
 
+    if results.get("partial_subjects"):
+        h.append("<p class='muted'>Not ranked (partial coverage): " + ", ".join(
+            f"{esc(p['label'])} ({p['n_items']} items)" for p in results["partial_subjects"]) + ".</p>")
     # leaderboard
     h.append("<h2>Leaderboard</h2><p class='sub'>Accuracy (pass@1, sample-averaged per item) with 95% cluster-bootstrap "
              "confidence intervals. Overlapping intervals mean the ranking is not resolved.</p>")
@@ -229,7 +239,7 @@ def render(results: dict[str, Any], out_path: Path, title: str = "VisionBench re
              "<th class='num'>Rank (95%)</th></tr>")
     for s in sorted(subs, key=lambda s: -s["accuracy"]["mean"]):
         a = s["accuracy"]
-        rk = results.get("rank_spread", {}).get(s["label"])
+        rk = results.get("rank_spread", {}).get(s.get("label_full", s["label"]))
         h.append(f"<tr><td>{esc(s['label'])}</td><td class='num'>{pct(a['mean'])}</td>"
                  f"<td class='num'>{pct(a['ci95'][0])}–{pct(a['ci95'][1])}</td><td class='num'>{pct(a['se'])}</td>"
                  f"<td class='num'>{pct(s['partial_credit']['mean'])}</td>"
@@ -308,7 +318,7 @@ def render(results: dict[str, Any], out_path: Path, title: str = "VisionBench re
         for c in results["comparisons"]:
             if "diff" not in c:
                 continue
-            h.append(f"<tr><td>{esc(c['a'])}</td><td>{esc(c['b'])}</td><td class='num'>{pct(c['diff'])}</td>"
+            h.append(f"<tr><td>{esc(_short(c['a']))}</td><td>{esc(_short(c['b']))}</td><td class='num'>{pct(c['diff'])}</td>"
                      f"<td class='num'>{pct(c['ci95'][0])}–{pct(c['ci95'][1])}</td>"
                      f"<td class='num'>{c['p_holm']:.4f}</td><td class='num'>{pct(c['mde_80pct_power'])}</td>"
                      f"<td class='num'>{c['item_correlation']:.2f}</td></tr>")
@@ -454,7 +464,7 @@ def reasoning_section(results: dict[str, Any], dataset_root: Path | None) -> str
         return ("<h2>Reasoning analysis</h2><p class='sub'>No reasoning critiques yet. Run "
                 "<code>visionbench critique &lt;run&gt;</code> to grade how each agent reasoned, not only what it "
                 "answered.</p>")
-    subs = R["subjects"]
+    subs = {_short(k): v for k, v in R["subjects"].items()}
     h = ["<h2>Reasoning analysis</h2><p class='sub'>A critic given the generator's ground-truth key facts audits each "
          "agent's visible reasoning: which facts it perceived correctly, whether each step is valid, which strategy it "
          "used, and whether its correct answers were actually earned. 'Sound success' means correct <em>and</em> "
@@ -501,7 +511,8 @@ def reasoning_section(results: dict[str, Any], dataset_root: Path | None) -> str
     fams = sorted({f for p in subs.values() for f in p["by_family"]})
     if fams:
         h.append("<h3>Sound success by family</h3><p class='sub'>Cell = sound-success rate (correct with valid, "
-                 "supported reasoning); hover for key-fact recall and the most common error.</p>")
+                 "supported reasoning) over the critiqued subset (small n per cell; read across families, not cells). "
+                 "Hover for values.</p>")
         fake = [{"label": lab, "by_family": {f: {"mean": d["sound_success"]} for f, d in p["by_family"].items()}}
                 for lab, p in subs.items()]
         h.append(heatmap_svg(fake, fams))
@@ -536,7 +547,7 @@ def reasoning_section(results: dict[str, Any], dataset_root: Path | None) -> str
                  "<th>B's errors there</th><th class='num'>B right, A wrong</th><th>A's errors there</th></tr>")
         for c in R["head_to_head"]:
             fmt = lambda d: ", ".join(f"{k.replace('_', ' ')} {pct(v, 0)}" for k, v in list(d.items())[:3]) or "–"
-            h.append(f"<tr><td>{esc(c['a'])}</td><td>{esc(c['b'])}</td><td class='num'>{c['a_wins']}</td>"
+            h.append(f"<tr><td>{esc(_short(c['a']))}</td><td>{esc(_short(c['b']))}</td><td class='num'>{c['a_wins']}</td>"
                      f"<td>{esc(fmt(c['why_b_failed']))}</td><td class='num'>{c['b_wins']}</td>"
                      f"<td>{esc(fmt(c['why_a_failed']))}</td></tr>")
         h.append("</table>")

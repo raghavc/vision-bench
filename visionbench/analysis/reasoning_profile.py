@@ -77,7 +77,9 @@ def profiles(run_dir: Path) -> dict[str, Any] | None:
                       "top_error": Counter(x["error_type"] for x, r in zip(fm, fr)
                                            if r["outcome"] != "correct").most_common(1)}
         prof["by_family"] = fam
-        g = [r["grounding"] for r in rs if r.get("grounding") and r["grounding"].get("evidence_coverage") is not None]
+        # crop grounding only means something when the agent could zoom (agentic mode)
+        g = [r["grounding"] for r in rs if r.get("mode") == "agentic" and r.get("grounding")
+             and r["grounding"].get("evidence_coverage") is not None]
         if g:
             full = [r["outcome"] == "correct" for r in rs if (r.get("grounding") or {}).get("evidence_coverage") == 1.0]
             part = [r["outcome"] == "correct" for r in rs

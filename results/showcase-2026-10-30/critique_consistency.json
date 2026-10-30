@@ -1,0 +1,19 @@
+{
+ "n": 20,
+ "agreement": {
+  "reasoning_valid": 0.9,
+  "answer_supported": 0.95,
+  "self_verification": 1.0,
+  "error_type": 0.95,
+  "strategy": 0.95,
+  "key_fact_status": 0.9626168224299065
+ },
+ "judge_model": "or:openai/gpt-6.1-terra",
+ "judge_usage": {
+  "input_tokens": 43934,
+  "output_tokens": 38707,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0,
+  "cost_usd": 0.2484375
+ }
+}

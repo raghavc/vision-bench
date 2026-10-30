@@ -1,0 +1,17 @@
+{
+ "n": 60,
+ "accuracy": 1.0,
+ "cohen_kappa": 1.0,
+ "sensitivity_on_correct": 1.0,
+ "specificity_on_incorrect": 1.0,
+ "false_accept_rate": 0.0,
+ "judge_model": "or:openai/gpt-6.1-terra",
+ "judge_usage": {
+  "input_tokens": 25378,
+  "output_tokens": 4135,
+  "cache_read_tokens": 0,
+  "cache_write_tokens": 0,
+  "cost_usd": 0.046324000000000004
+ },
+ "disagreements": []
+}

@@ -116,6 +116,16 @@ def aggregate(run_dir: Path, settings: Settings) -> dict[str, Any]:
             }
         out["subjects"].append(s)
 
+    # subjects with < 50% of the best coverage are reported separately (partial runs distort comparisons)
+    most = max((s["accuracy"]["n_items"] for s in out["subjects"]), default=0)
+    out["partial_subjects"] = [{"label": s["label"], "n_items": s["accuracy"]["n_items"]}
+                               for s in out["subjects"] if s["accuracy"]["n_items"] < 0.5 * most]
+    partial = {p["label"] for p in out["partial_subjects"]}
+    out["subjects"] = [s for s in out["subjects"] if s["label"] not in partial]
+    vision_by_subject = {k: v for k, v in vision_by_subject.items() if k not in partial}
+    for s in out["subjects"]:
+        s["short"] = short_label(s["label"], [x["mode"] for x in out["subjects"]])
+
     # pairwise comparisons with Holm correction
     labels = list(vision_by_subject)
     pairs = {}
@@ -196,3 +206,10 @@ def consensus_wrong(run_dir: Path, items: dict[str, TaskInstance]) -> list[dict[
                         "key": json.dumps(it.answer.value, default=str)[:200], "vendors": sorted(vendors),
                         "models": sorted(models[(uid, sig)])})
     return sorted(out, key=lambda d: -len(d["vendors"]))
+
+
+def short_label(label: str, modes: list[str]) -> str:
+    """'or:google/gemini-4-argon [direct]' -> 'gemini-4-argon' (mode kept only if runs mix modes)."""
+    name, _, mode = label.partition(" [")
+    name = name.removeprefix("or:").split("/")[-1]
+    return name if len(set(modes)) <= 1 else f"{name} [{mode}"
