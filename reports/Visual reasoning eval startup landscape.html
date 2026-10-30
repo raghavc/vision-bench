@@ -1,0 +1,483 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Visual reasoning eval startup landscape</title><style>
+:root{color-scheme:light dark;--bg:#fcfcfb;--fg:#1a1a19;--muted:#5d5c58;--rule:#e4e3df;--accent:#2a78d6;--card:#f3f2ef}
+@media (prefers-color-scheme:dark){:root{--bg:#1a1a19;--fg:#ecebe7;--muted:#a9a8a1;--rule:#33332f;--accent:#6da7ec;--card:#242422}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif}
+main{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+h1{font-size:32px;line-height:1.2;margin:0 0 18px} h2{font-size:22px;margin:44px 0 10px;padding-top:12px;border-top:1px solid var(--rule)} h3{font-size:17px;margin:28px 0 8px}
+p,li{color:var(--fg)} a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px;display:block;overflow-x:auto}
+th,td{text-align:left;vertical-align:top;padding:7px 9px;border-bottom:1px solid var(--rule)} th{color:var(--muted);font-weight:600}
+strong{font-weight:650} code{font-size:13.5px;background:var(--card);padding:1px 5px;border-radius:4px}
+</style></head><body><main><h1>Sell verifiable visual worlds, not leaderboards</h1>
+<p>Frontier labs pay for vision work, but the money goes to <strong>verifiable training environments, not benchmarks</strong>. Buyers ask for RL environments 10–20x more often than for evals. Contracts run six to seven figures per quarter. Tasks are priced at $200–2,000 each, and exclusivity carries a 4–5x premium (<a href="https://epoch.ai/gradient-updates/state-of-rl-envs" target="_blank" rel="noopener">Epoch AI</a>). Anthropic currently has a live opening on its Vision team whose job is to write "a vendor-facing specification for a new family of visual RL training tasks" and to build QA that catches reward hacking (<a href="https://job-boards.greenhouse.io/anthropic/jobs/5074217008" target="_blank" rel="noopener">Anthropic Greenhouse</a>). That is the clearest sign that a buyer exists. Headroom is real, but it has moved. Exam-style, OCR, chart and document vision is saturated at or above human level. The large gaps are in perception-native, stateful and metric tasks:</p>
+<ul>
+<li>Humanity's Sixth Sense: 55% vs 93% for humans.</li>
+<li>MMSI-Bench (multi-image spatial): about 49% vs 97%.</li>
+<li>Streaming event counting: about 37 overall, and under 4 on periodic events vs 93 for humans.</li>
+<li>Long-horizon world-state tracking and long-horizon games.</li>
+</ul>
+<p>No funded startup owns "visual reasoning as an RL-environment product". The crowded part of the environment market is text, tools and GUI clones. Expert-data incumbents (Mercor, Surge, Scale, Snorkel) could still enter quickly. VisionBench's first live run shows the right shape for a wedge. Models score near 100% on fully specified short-chain families and 27–65% on search and tracking families. Programmatic keys, blind controls and cross-vendor audits catch defects that hand-written benchmarks keep missing. The run cost $13.40 for 1,771 attempts. The recommended path is to turn the generator library into difficulty-calibrated, state-verified RL task families. Prove training lift on an open model, land one or two pilots, then climb a 2D → 2.5D → 3D ladder. Move into Unreal Engine 5 only once Epic's AI-training restriction is formally lifted.</p>
+<h2>Good vision tasks fail without the image and survive an audit</h2>
+<p>Most benchmark failures are not about difficulty. They are about <strong>wrong answer keys and items that don't measure vision at all</strong>. Audits of flagship benchmarks keep finding defect rates in the double digits:</p>
+<ul>
+<li><strong>SWE-bench Verified.</strong> OpenAI retired it in February 2026 after finding that <strong>at least 59.4% of audited problems in a frequently-failed subset had tests that rejected correct solutions</strong> (<a href="https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/" target="_blank" rel="noopener">OpenAI</a>).</li>
+<li><strong>Humanity's Last Exam.</strong> FutureHouse experts found about 29–30% of audited chemistry and biology answers contradicted by peer-reviewed literature (<a href="https://www.futurehouse.org/research/hle-exam" target="_blank" rel="noopener">FutureHouse</a>).</li>
+<li><strong>MMLU.</strong> About 6.5% of questions are erroneous, rising to 57% in virology (<a href="https://arxiv.org/abs/2406.04127v1" target="_blank" rel="noopener">arXiv 2406.04127</a>).</li>
+<li><strong>POPE (vision).</strong> Re-annotation found label errors in 9.3% of positive questions, and the corrections reshuffled model rankings (<a href="https://www.emergentmind.com/topics/repope" target="_blank" rel="noopener">RePOPE</a>).</li>
+</ul>
+<p>Epoch AI's Benchmark Reviews, launched in September 2026, turn this into a public bar. A benchmark is rated <strong>"Flawed" if score-affecting defects reach 20% of total score</strong>. To be reviewable, the tasks, the scoring logic and the harness settings must all be inspectable. Of the first 15 benchmark versions reviewed, 9 were rated Flawed (<a href="https://epoch.ai/data/benchmark-reviews-documentation/methodology" target="_blank" rel="noopener">Epoch methodology</a>; <a href="https://runtimewire.com/article/epoch-ai-benchmark-reviews-nine-flawed" target="_blank" rel="noopener">RuntimeWire</a>). There is a trap in the design method most vendors use. Defects concentrate in the items models fail (OpenAI's 59.4% figure comes from exactly that subset). So "keep only what models get wrong" adversarial filtering <strong>selects for broken keys</strong> unless every model-failed item gets extra human verification.</p>
+<p>Vision adds a second problem: <strong>many "visual" questions can be answered without looking</strong>. A NeurIPS 2026 audit found that 20.2% of MMStar questions, a set curated specifically to need the image, show zero accuracy gain from the image (<a href="https://neurips.cc/virtual/2026/178389" target="_blank" rel="noopener">Degtiarev et al.</a>). Video is worse. An audit of 14 video-QA benchmarks found roughly 54–55% of samples solvable from a single center frame, shuffled frames or no visual input (<a href="https://www.alphaxiv.org/abs/2603.29616" target="_blank" rel="noopener">Video-Oasis</a>). TOC-Bench threw out 60.7% of its candidate questions because they did not need temporal information (<a href="https://arxiv.org/abs/2605.09904" target="_blank" rel="noopener">arXiv 2605.09904</a>).</p>
+<p>Zero-shot blind tests are necessary but not sufficient. NYU's Test-set Stress-Test trains a model on only the <em>non-visual</em> features of a test set to expose shortcuts that can be learned. It pruned 30.7% of VSI-Bench. Fine-tuning on those features raised a 7B model's blind VSI-Bench accuracy from 25.9% to 44.7% (<a href="https://arxiv.org/abs/2511.04655v1" target="_blank" rel="noopener">arXiv 2511.04655</a>). "Mirage" research shows the leak runs deeper than question text. Models can build spurious visual content in latent space, so cleaning text alone does not fix it (<a href="https://arxiv.org/abs/2606.13870" target="_blank" rel="noopener">arXiv 2606.13870</a>).</p>
+<p>The third design axis is the <strong>perception–reasoning confound</strong>. In Scale's Humanity's Sixth Sense (HSS), 94% of 8,573 model failures came from perception or latent inference, and only 5% from faulty logic (<a href="https://labs.scale.com/blog/introducing-humanitys-sixth-sense" target="_blank" rel="noopener">Scale Labs</a>). ARC-AGI-3 goes the other way. It deliberately makes its environments turn-based, with a tiny action space, so that difficulty sits in the reasoning, not the controls (<a href="https://arcprize.org/media/ARC_AGI_3_Technical_Report.pdf" target="_blank" rel="noopener">ARC-AGI-3 Technical Report</a>). A benchmark that doesn't tag which bottleneck each item targets produces numbers nobody can act on. BabyVision gives a specific reason this matters for training. RLVR gains concentrated in the subtypes that can be put into words, with negligible or negative gains on visual tracking (<a href="https://hyper.ai/en/papers/2601.06521" target="_blank" rel="noopener">hyper.ai summary</a>). Text-answer verifiable rewards may not train non-verbal visual skill at all.</p>
+<h3>What the best task pipelines actually do</h3>
+<p>The strongest published pipelines share a common set of practices.</p>
+<p><strong>Humanity's Sixth Sense (Scale + Elorian).</strong> Annotators wrote a question, a reference answer and a rubric of atomic criteria. Every task needed unanimous human agreement and was rejected if a high-resolution crop made the answer obvious. Three independent review rounds kept <strong>522 of 3,466 tasks (15.1%)</strong>. Answers are free-form, graded criterion by criterion, with all criteria required to pass. A judge cross-check using three vendors' models gave identical rankings (ρ=1.0). Withholding the media dropped the leading model to 6.6% (<a href="https://labs.scale.com/blog/introducing-humanitys-sixth-sense" target="_blank" rel="noopener">Scale Labs</a>). The critique still bites: Scale chose the tasks, controlled the judging and set a human baseline of n=20, with no outside replication (<a href="https://magica.com/news/elorian-scale-ai-humanitys-sixth-sense-benchmark" target="_blank" rel="noopener">Magica</a>).</p>
+<p><strong>ARC-AGI-3.</strong> This is the most rigorous public spec for interactive environments:</p>
+<ul>
+<li>a concept-doc review before anything is built;</li>
+<li>50,000-step random-agent checks and 1M-step fuzzing sweeps;</li>
+<li>a compression-based novelty test between environments;</li>
+<li>at least six levels per environment, starting with a tutorial;</li>
+<li>10 untrained members of the public per environment, with inclusion only if at least two solve every level;</li>
+<li>scoring as (human actions / AI actions)², against the upper-median best human.</li>
+</ul>
+<p>In total, 486 participants made 2,893 attempts on 414 candidate environments (<a href="https://arcprize.org/media/ARC_AGI_3_Technical_Report.pdf" target="_blank" rel="noopener">ARC-AGI-3 Technical Report</a>). ARC also states the lesson that matters most for a procedural vendor. When public and private sets come from the same distribution, labs can generate millions of synthetic in-domain tasks and train on them. <strong>Private sets must therefore be out-of-distribution from public demonstration data.</strong></p>
+<p><strong>Mercor APEX.</strong> For contrast on cost, expert rubric tasks ran about <strong>$2,500 each</strong> ($500k+ for the first 200 cases) (<a href="https://www.implicator.ai/mercors-apex-says-gpt-5-scores-64-on-real-work-still-not-production-ready/" target="_blank" rel="noopener">Implicator</a>).</p>
+<p><strong>Statistics.</strong> Questions that share an image or video must use clustered standard errors and paired-difference tests (<a href="https://arxiv.org/abs/2411.00640" target="_blank" rel="noopener">Miller, arXiv 2411.00640</a>). Epoch recommends at least five runs per model.</p>
+<h3>How to specify a vision task</h3>
+<p>These practices converge on a task specification that VisionBench should adopt as its contract with buyers. Each element below maps to a documented failure mode.</p>
+<table>
+<thead>
+<tr>
+<th>Spec field</th>
+<th>Requirement</th>
+<th>Failure it prevents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Construct and bottleneck tag</td>
+<td>One named skill; tagged perception / spatial / temporal / reasoning / tool-use</td>
+<td>Uninterpretable scores (HSS 94% perception vs ARC's reasoning focus)</td>
+</tr>
+<tr>
+<td>Ground truth</td>
+<td>Computed by a generator, solver or simulator state; atomic rubric only where free-form is unavoidable</td>
+<td>Key errors of 20–60% in the hardest tail</td>
+</tr>
+<tr>
+<td>Uniqueness / ambiguity proof</td>
+<td>Alternative readings checked; decision margins enforced</td>
+<td>Multiple defensible answers</td>
+</tr>
+<tr>
+<td>Mandatory controls</td>
+<td>Blind, caption-only, single-frame/shuffled-frame (video), crop-obvious, plus a set-level learned-shortcut test</td>
+<td>Language-prior and temporal shortcuts (MMStar, Video-Oasis, TsT)</td>
+</tr>
+<tr>
+<td>Answer format</td>
+<td>Free-form typed answers or ≥10 options; minimal pairs for perception and physics</td>
+<td>25% MCQ floors that compress discrimination</td>
+</tr>
+<tr>
+<td>Human baseline</td>
+<td>Solve rate and time/actions, with documented demographics</td>
+<td>Unknown headroom; narrow baselines (BabyVision, HSS n=20)</td>
+</tr>
+<tr>
+<td>Difficulty knobs</td>
+<td>Generator parameters, not filtering against particular models</td>
+<td>Bias against the filtering vendor's models</td>
+</tr>
+<tr>
+<td>Splits</td>
+<td>Public demo, semi-private, private out-of-distribution; rotatable</td>
+<td>Distributional training (ARC lesson)</td>
+</tr>
+<tr>
+<td>Harness metadata</td>
+<td>Effort, token/time limits, tools, image resolution, frame budget</td>
+<td>"Not enough info" under Epoch's rubric</td>
+</tr>
+<tr>
+<td>Statistics</td>
+<td>Clustered SEs, k samples, pass^k, paired tests</td>
+<td>False rankings from small n</td>
+</tr>
+<tr>
+<td>Audit trail</td>
+<td>Reviewer IDs, defect rate per batch, version bumps</td>
+<td>Silent drift; self-certification</td>
+</tr>
+</tbody>
+</table>
+<p>VisionBench's first run already implements most of this. The results show both why it works and where it still leaks (<a href="https://github.com/raghavc/vision-bench/blob/main/FINDINGS.md" target="_blank" rel="noopener">VisionBench FINDINGS</a>):</p>
+<ul>
+<li><strong>Blind control.</strong> Withholding the image collapsed every model to <strong>6.7–9.4%</strong>, a vision-minus-blind gap of +60 to +80 points. The same control flagged <code>block_stability</code> as 30–60% solvable blind, because about 45% of towers are stable and the answer space is tiny.</li>
+<li><strong>Cross-vendor consensus audit.</strong> It looks for identical wrong answers from different vendors. On its first pass it surfaced five genuine item or layout defects, among them an ambiguous receipt column header, a rotated "P" that really is a "d", and merged belt segments. It also surfaced two cases where the key was right and models shared a misconception: a centre-of-mass check against the wrong width, and mirror-image chirality on cube folding.</li>
+<li><strong>Rubric audit.</strong> The <code>chart_insight</code> family scored about 10% for every model <em>with 100% judge agreement</em>. The judge was consistent but the rubric was unfair. This is the same point the HSS critique makes: judge agreement measures consistency, not validity.</li>
+</ul>
+<h2>Models ace specified short chains and break on search, tracking and state</h2>
+<p>The capability map has split cleanly. MBZUAI's "Hard Vision, Easy Vision" covers 6 frontier systems, 34 capabilities and 55 benchmarks. It finds GPT-6 Astra at or above the reference on OCR (98.1 vs 98.0), document and chart understanding, 2D spatial reasoning (96.0 vs 95.8), visual math (92.5 vs 78.7) and even 3D grounding (73.8 vs 46.5) (<a href="https://arxiv.org/html/2609.35718v1" target="_blank" rel="noopener">arXiv 2609.35718</a>). MMMU-Pro sits at 87–88% (<a href="https://artificialanalysis.ai/evaluations/mmmu-pro" target="_blank" rel="noopener">Artificial Analysis</a>), and OSWorld-Verified computer use is <strong>above</strong> the 72.4% human baseline at 83–86% (<a href="https://www.developersdigest.tech/benchmarks/osworld" target="_blank" rel="noopener">Developer's Digest</a>). Building there means building on saturated ground.</p>
+<p>The gaps that remain are concentrated in four areas:</p>
+<ul>
+<li><strong>Perception that cannot be verbalized.</strong></li>
+<li><strong>State tracked over time or across views.</strong></li>
+<li><strong>Metric precision.</strong></li>
+<li><strong>Long-horizon interaction.</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Benchmark</th>
+<th>Frontier result</th>
+<th>Human / reference</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Image, perception-native</td>
+<td>Humanity's Sixth Sense (522 tasks)</td>
+<td>55.4% (Gemini 4 Argon); median of 25 models 30.9%</td>
+<td>93.1%</td>
+<td><a href="https://benchlm.ai/benchmarks/scale-hss" target="_blank" rel="noopener">BenchLM</a>; <a href="https://runtimewire.com/article/scale-ai-humanitys-sixth-sense-visual-reasoning-benchmark" target="_blank" rel="noopener">RuntimeWire</a></td>
+</tr>
+<tr>
+<td>Image, pre-linguistic</td>
+<td>BabyVision</td>
+<td>49.7% at release; 68.5% later (self-reported); 85.7% with Python</td>
+<td>94.1% adult</td>
+<td><a href="https://arxiv.org/abs/2601.06521" target="_blank" rel="noopener">arXiv 2601.06521</a>; <a href="https://llm-stats.com/benchmarks/babyvision" target="_blank" rel="noopener">llm-stats</a>; <a href="https://benchlm.ai/benchmarks/babyvisionpython" target="_blank" rel="noopener">BenchLM</a></td>
+</tr>
+<tr>
+<td>Image, abstract rules</td>
+<td>VisuLogic</td>
+<td>35.0 (best listed)</td>
+<td>51.4 (chance 25)</td>
+<td><a href="https://visulogic-benchmark.github.io/VisuLogic" target="_blank" rel="noopener">VisuLogic</a></td>
+</tr>
+<tr>
+<td>Image, tool use</td>
+<td>VisualToolBench</td>
+<td>18.7%</td>
+<td>—</td>
+<td><a href="https://scale.com/blog/visualtoolbench" target="_blank" rel="noopener">Scale</a></td>
+</tr>
+<tr>
+<td>Image, precise charts</td>
+<td>Chartography</td>
+<td>71.6%</td>
+<td>—</td>
+<td><a href="https://emergent.sh/learn/gemini-4-argon-benchmarks" target="_blank" rel="noopener">emergent.sh</a></td>
+</tr>
+<tr>
+<td>Multi-image spatial</td>
+<td>MMSI-Bench</td>
+<td>41.9–49.2%</td>
+<td>97.2%</td>
+<td><a href="https://arxiv.org/html/2505.23764v2" target="_blank" rel="noopener">arXiv 2505.23764</a>; <a href="https://benchmarklist.com/benchmarks/mmsi_bench/" target="_blank" rel="noopener">benchmarklist</a></td>
+</tr>
+<tr>
+<td>Metric 3D</td>
+<td>Depth AbsRel / reconstruction error</td>
+<td>0.63 / 1.40</td>
+<td>0.44 / 0.61 specialist</td>
+<td><a href="https://arxiv.org/html/2609.35718v1" target="_blank" rel="noopener">arXiv 2609.35718</a></td>
+</tr>
+<tr>
+<td>Video, streaming counting</td>
+<td>SVCBench</td>
+<td>~37 overall; periodic events &lt;4</td>
+<td>93–100; 93.2</td>
+<td><a href="https://pith.science/paper/2603.12703" target="_blank" rel="noopener">Pith summary</a></td>
+</tr>
+<tr>
+<td>Video, long-horizon spatial</td>
+<td>VSI-Super-Wild</td>
+<td>Consistent failure on world-state tracking</td>
+<td>—</td>
+<td><a href="https://arxiv.org/abs/2607.13681" target="_blank" rel="noopener">arXiv 2607.13681</a></td>
+</tr>
+<tr>
+<td>Interactive novel games</td>
+<td>ARC-AGI-3</td>
+<td>&lt;1% at launch (Mar 2026) → 62.7% (Oct 2026)</td>
+<td>100% of environments</td>
+<td><a href="https://arcprize.org/media/ARC_AGI_3_Technical_Report.pdf" target="_blank" rel="noopener">ARC report</a>; <a href="https://benchlm.ai/benchmarks/arcagi3" target="_blank" rel="noopener">BenchLM</a></td>
+</tr>
+<tr>
+<td>Long-horizon games</td>
+<td>NetHack (BALROG)</td>
+<td>13.2% progress</td>
+<td>—</td>
+<td><a href="https://creategame.ai/blog/can-ai-play-video-games/" target="_blank" rel="noopener">creategame.ai</a></td>
+</tr>
+<tr>
+<td>Real-time games</td>
+<td>VideoGameBench</td>
+<td>0.48% (2025 models)</td>
+<td>—</td>
+<td><a href="https://arxiv.org/abs/2505.18134" target="_blank" rel="noopener">arXiv 2505.18134</a></td>
+</tr>
+<tr>
+<td>3D game worlds</td>
+<td>SIMA 2</td>
+<td>~62% task completion</td>
+<td>~70%</td>
+<td><a href="https://www.marktechpost.com/2025/11/16/google-deepmind-introduces-sima-2-a-gemini-powered-generalist-agent-for-complex-3d-virtual-worlds/" target="_blank" rel="noopener">MarkTechPost</a></td>
+</tr>
+<tr>
+<td>Robot policies</td>
+<td>LIBERO → LIBERO-PRO</td>
+<td>&gt;90% → 0.0% under perturbation</td>
+<td>—</td>
+<td><a href="https://aitopics.org/doc/arxivorg:49434AE9" target="_blank" rel="noopener">LIBERO-PRO</a></td>
+</tr>
+</tbody>
+</table>
+<p>Several caveats temper this table. Most 2026 frontier numbers come from aggregators, not model cards. Some headline video results partly measure API frame limits: Gemini 4 Argon's 91.7% on LVBench was run at 1 fps, while rivals got 300–800 frames (<a href="https://emergent.sh/learn/gemini-4-argon-benchmarks" target="_blank" rel="noopener">emergent.sh</a>). Some spatial benchmarks have their own shortcut problems. A bag-of-words baseline that ignores temporal structure scores about 95% on one VSI-Super task, even on 4-hour videos (<a href="https://arxiv.org/abs/2511.16655v1" target="_blank" rel="noopener">arXiv 2511.16655</a>).</p>
+<p>Benchmarks also decay fast. ZeroBench went from 0% to roughly 41–53% with tools in about 18 months (<a href="https://benchlm.ai/benchmarks/zeroBench" target="_blank" rel="noopener">BenchLM</a>). ARC-AGI-3 went from 0.4% to 62.7% in seven months, and reasoning effort alone moves GPT-6 Astra from 35.2% to 62.7% (<a href="https://benchlm.ai/benchmarks/arcagi3" target="_blank" rel="noopener">BenchLM</a>). Static sets are a depreciating asset. Results that don't separate tool access and compute budgets are hard to interpret.</p>
+<p>Root-cause research converges on four explanations. Models substitute language priors for weak visual primitives (<a href="https://arxiv.org/abs/2601.06521" target="_blank" rel="noopener">BabyVision</a>). Visual attention fades as chains of thought lengthen (<a href="https://arxiv.org/pdf/2606.22565" target="_blank" rel="noopener">Look Light, Think Heavy</a>). Visual-token budgets cap perceptual bandwidth (<a href="https://arxiv.org/html/2605.01345v2" target="_blank" rel="noopener">arXiv 2605.01345</a>). And models have no mechanism to bind objects and agents into a persistent spatial world model (<a href="https://arxiv.org/abs/2607.13681" target="_blank" rel="noopener">VSI-Super-Wild</a>). Extra reasoning compute, up to 13x baseline cost, buys little on many perception tasks (<a href="https://arxiv.org/html/2609.35718v1" target="_blank" rel="noopener">arXiv 2609.35718</a>).</p>
+<h3>What VisionBench's first run adds</h3>
+<p>VisionBench's showcase run reproduces this split under tight experimental control, and adds a mechanism. It covered 150 procedural items across 15 families, plus 25-item samples of VisuLogic and BabyVision. Five models from four vendors were run at medium reasoning effort (<a href="https://github.com/raghavc/vision-bench/blob/main/FINDINGS.md" target="_blank" rel="noopener">VisionBench FINDINGS</a>).</p>
+<p><strong>Short, fully specified chains are solved.</strong> Averaged across the five models:</p>
+<ul>
+<li><code>chart_reasoning</code>, <code>graph_paths</code> and <code>receipt_reasoning</code>: <strong>100%</strong>;</li>
+<li><code>lattice_geometry</code>: 98%;</li>
+<li><code>gear_train</code>: 97%;</li>
+<li><code>counting</code>: 96%, though this family is partly guessable.</li>
+</ul>
+<p><strong>Search and tracking families are not.</strong> <code>visual_search</code> averages <strong>27%</strong>, <code>maze_path</code> 44%, <code>grid_rules</code> 57% and <code>wire_tracing</code> 65%. These per-family means come from the run's <code>results.json</code>. Within families the spread is wide: <code>wire_tracing</code> runs 90–100% for the top two models and 40–50% for the rest, and Qwen3.8-Flash scores 5% on grid rule induction.</p>
+<p><strong>The headline ranking is statistically clean.</strong> Gemini-4-Argon (88.9%) and GPT-6.1-Terra (85.9%) are tied (p=0.54). Both beat the other three at Holm-corrected significance.</p>
+<p><strong>Small per-step errors compound.</strong> VisionBench's compounding analysis (FINDINGS.md §11) resampled the run's own item outcomes. It chained k items, each from a <em>different</em> task family, into one task that is solved only if every step is correct, treating steps as independent.
+- <strong>At 5 steps:</strong> Gemini-4-Argon solves 53%, GPT-6.1-Terra 47%, Claude Haiku 5.5 25%, GPT-6-Luna 16% and Qwen3.8-Flash 13%.
+- <strong>At 15 steps:</strong> Gemini solves about 10%, Terra 6% and Haiku 1%.</p>
+<p>Steps are not equally hard. Saturated families contribute about 1.0, and the search and tracking families pull the product down. That is why Gemini's 15-step result (10%) falls below the uniform-difficulty figure 0.88¹⁵ ≈ 15%. Either way, a model that looks "88% good" on single steps fails most 15-step tasks. Real chained tasks also propagate early errors, so the independence assumption is optimistic. This is the arithmetic behind the NetHack, Pokémon and VSI-Super-Wild results. It argues for long-chain task families scored on full-episode success.</p>
+<p><strong>pass@1 hides unreliability.</strong> On 30 items sampled three times, Haiku, Luna and Qwen fall to <strong>54–58% pass^3</strong>, 15–23 points below their pass@1.</p>
+<p><strong>A correct answer does not mean a valid trace.</strong> A reasoning critic was grounded in the generator's key facts, with 90–100% test-retest agreement. It found that <strong>12% (Gemini) to 30% (Haiku) of correct answers were not supported</strong> by valid reasoning. For every model except Terra, <strong>70–100% of failures began with a perception misread</strong>, consistent with HSS's 94%.</p>
+<p><strong>Synthetic skill does not always transfer to real images.</strong> Haiku ranked third on the procedural suite but last on both real-image samples, near chance on VisuLogic (28%). This is a measured instance of the "synthetic-render skill" risk.</p>
+<p><strong>Two older public sets may be near the top-model ceiling.</strong> Gemini scored 68% on the VisuLogic sample, above the published 51.4% human baseline. Terra scored 92% on the BabyVision sample, against a published frontier best of about 50–69%. Both samples have only 25 items and 95% confidence intervals of about ±20 points, so this is a lead to chase, not a finding.</p>
+<p>The run's stated limitations bound all of this:</p>
+<ul>
+<li>150 items, giving a minimum detectable difference of 7–10 points;</li>
+<li>one effort setting;</li>
+<li>an OpenAI-family judge critiquing an OpenAI model;</li>
+<li>an inconclusive caption control;</li>
+<li>no human baseline yet.</li>
+</ul>
+<h2>The market sells hours; the margin is in reusable assets</h2>
+<p>The industry that supplies frontier labs grew explosively in 2025–2026 and sorted into three tiers. The first is <strong>expert human-data marketplaces</strong>, which bill per expert-hour and pass 60–70% of revenue through to contractors. The second is <strong>Scale AI</strong>, flat at about $1B after Meta's stake. Its other lab customers reportedly stepped back, and it has had three CEOs since June 2025 (<a href="https://www.cnbc.com/2025/07/16/scale-ai-cuts-14percent-of-workforce-after-meta-investment-hiring-of-wang.html" target="_blank" rel="noopener">CNBC</a>; <a href="https://en.wikipedia.org/wiki/Scale_AI" target="_blank" rel="noopener">Wikipedia</a>). The third is a newer group of <strong>eval and environment companies</strong> that now command venture valuations.</p>
+<table>
+<thead>
+<tr>
+<th>Company</th>
+<th>Model</th>
+<th>Latest scale</th>
+<th>Valuation</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mercor</td>
+<td>Expert marketplace + APEX benchmarks + acquired env startups</td>
+<td>&gt;$2B gross run rate (Jun 2026); net ~$0.6–0.8B; ~91% from labs</td>
+<td>$10B (Oct 2025); $20B in talks</td>
+<td><a href="https://dealroom.co/news/137121-mercor-doubles-to-2b-gross-revenue-run-rate-as-ai-labs-buy-expert-data/" target="_blank" rel="noopener">Dealroom</a>; <a href="https://aiweekly.co/alerts/mercor-books-614m-in-h1-2026-leaning-on-openai-anthropic" target="_blank" rel="noopener">AI Weekly</a></td>
+</tr>
+<tr>
+<td>Surge AI</td>
+<td>Premium RLHF/expert data; RL-env group</td>
+<td>~$1.2B (2024)</td>
+<td>$15–25B talks, unconfirmed</td>
+<td><a href="https://en.wikipedia.org/wiki/Surge_AI" target="_blank" rel="noopener">Wikipedia</a></td>
+</tr>
+<tr>
+<td>Handshake AI</td>
+<td>Student/expert marketplace</td>
+<td>~$1B gross / ~$300M net (Apr 2026)</td>
+<td>~$2.7B secondary</td>
+<td><a href="https://dealroom.co/news/127345-handshakes-arr-crosses-1b-as-ai-training-revenue-surges/" target="_blank" rel="noopener">Dealroom</a></td>
+</tr>
+<tr>
+<td>micro1</td>
+<td>Expert marketplace + datasets</td>
+<td>~$500M gross run rate</td>
+<td>$4B (Oct 2026)</td>
+<td><a href="https://dealroom.co/news/155583-micro1-raises-100m-at-4b-valuation-for-ai-training-data/" target="_blank" rel="noopener">Dealroom</a></td>
+</tr>
+<tr>
+<td>Snorkel AI</td>
+<td>Data-as-a-service + RL environments</td>
+<td>$375M run rate, 18x in 12 months</td>
+<td>$3.5B (Sep 2026)</td>
+<td><a href="https://techcrunch.com/2026/09/22/snorkel-ai-triples-valuation-to-3-5b-as-demand-for-ai-training-data-booms/" target="_blank" rel="noopener">TechCrunch</a></td>
+</tr>
+<tr>
+<td>Scale AI</td>
+<td>Full stack; Scale Labs benchmarks (VTB, HSS); defense</td>
+<td>Just under $1B (2025)</td>
+<td>~$29B implied (2025)</td>
+<td><a href="https://en.wikipedia.org/wiki/Scale_AI" target="_blank" rel="noopener">Wikipedia</a></td>
+</tr>
+<tr>
+<td>Arena</td>
+<td>Public leaderboard funnel → paid evals</td>
+<td>&gt;$100M annualized</td>
+<td>$3.1B (Oct 2026)</td>
+<td><a href="https://angelinvestorsnetwork.com/venture-capital/arena-raises-200m-in-series-b-funding-at-3-1b-valuation" target="_blank" rel="noopener">Angel Investors Network</a></td>
+</tr>
+<tr>
+<td>Vals AI</td>
+<td>Confidential benchmarking</td>
+<td>~$1.3M est.</td>
+<td>~$400M (Aug 2026)</td>
+<td><a href="https://pondero.ai/news/2026-09-20-vals-ai-series-a/" target="_blank" rel="noopener">Pondero</a></td>
+</tr>
+<tr>
+<td>Patronus AI</td>
+<td>Pivoted to simulated "digital worlds"</td>
+<td>&gt;15x YoY growth</td>
+<td>$50M Series B</td>
+<td><a href="https://techcrunch.com/2026/06/25/patronus-ai-lands-50m-to-build-digital-worlds-that-stress-test-ai-agents/" target="_blank" rel="noopener">TechCrunch</a></td>
+</tr>
+</tbody>
+</table>
+<p>Mercor's growth comes on thin margins:</p>
+<ul>
+<li><strong>Rates:</strong> experts average about $93–110/hr, and buyers pay roughly $150–165/hr.</li>
+<li><strong>Gross margin:</strong> 27% in 2025 and 33% in Q2 2026. Handshake runs about 30%.</li>
+<li><strong>The contrast:</strong> micro1 reports <strong>80–90% gross margins on off-the-shelf datasets</strong> (<a href="https://aitraining.jobs/research/what-ai-labs-pay-for-human-data" target="_blank" rel="noopener">AITraining.jobs</a>).</li>
+</ul>
+<p>RL environments sit between the two. Prices run $200–2,000 per task, about $20k per website replica and about $300k for a high-fidelity product clone such as Slack. Contracts run six to seven figures per quarter, with $300k–500k seen at a neolab (<a href="https://epoch.ai/gradient-updates/state-of-rl-envs" target="_blank" rel="noopener">Epoch AI</a>).</p>
+<p>Lab spend is enormous and concentrated:</p>
+<ul>
+<li><strong>Meta → Scale:</strong> at least $450M a year committed.</li>
+<li><strong>Google → Scale:</strong> about $150–200M a year before it pulled back.</li>
+<li><strong>OpenAI:</strong> about $20k per UI-gym website, with hundreds bought.</li>
+<li><strong>Anthropic:</strong> leaders discussed spending over $1B on RL environments in a year.</li>
+</ul>
+<p>The first three come from <a href="https://aitraining.jobs/research/what-ai-labs-pay-for-human-data" target="_blank" rel="noopener">AITraining.jobs</a>, the Anthropic figure from <a href="https://epoch.ai/gradient-updates/state-of-rl-envs" target="_blank" rel="noopener">Epoch AI</a>.</p>
+<p>Four trends define the period. Product has moved from labels to expert data, and from expert data to RL environments. <strong>Neutrality became a procurement criterion</strong> after Meta's Scale deal. Consolidation has begun: Mercor reportedly bought Deeptune and Sepal, and Labelbox bought Upcraft (<a href="https://www.rl-list.com/rl-environments-for-computer-use" target="_blank" rel="noopener">RL List</a>). And labs are in-sourcing commodity work. Evals became a venture category in their own right, but credibility still gets hurt by conflicts, the canonical case being OpenAI's late-disclosed funding of FrontierMath (<a href="https://techcrunch.com/2025/01/19/ai-benchmarking-organization-criticized-for-waiting-to-disclose-funding-from-openai/" target="_blank" rel="noopener">TechCrunch</a>).</p>
+<p>Vision specifically is <strong>under-served</strong>. The most visible commercial vision eval is Scale's VisualToolBench, with a top score of 18.7% (<a href="https://scale.com/blog/visualtoolbench" target="_blank" rel="noopener">Scale</a>). The crowded "multimodal" segment is egocentric and robotics data capture, where raw footage costs $15–40/hr and is falling toward commodity pricing (<a href="https://www.chinatalk.media/p/take-ten-thousand-egocentric-data" target="_blank" rel="noopener">ChinaTalk</a>). The researchers found no venture-scale company dedicated to visual-reasoning evals or vision RL environments.</p>
+<h2>Simulation environments win on authoritative state, not photorealism</h2>
+<p>Simulation-based evaluation splits into two families that barely overlap.</p>
+<p><strong>Embodied and robotics simulators</strong> verify success by reading privileged simulator state, and they optimize for throughput with small policies. Examples include Isaac Lab, ManiSkill3, Habitat, BEHAVIOR-1K, ProcTHOR, CARLA, and UnrealCV/UnrealZoo.</p>
+<ul>
+<li>BEHAVIOR-1K checks 1,000 household activities against logical goal predicates over simulator state (<a href="https://arxiv.org/abs/2403.09227" target="_blank" rel="noopener">arXiv 2403.09227</a>).</li>
+<li>CARLA scores route completion and infractions from engine state (<a href="https://arxiv.org/abs/1711.03938" target="_blank" rel="noopener">arXiv 1711.03938</a>).</li>
+<li>ManiSkill3 reaches 30,000+ FPS of GPU-parallel simulation and rendering (<a href="https://iclr.cc/virtual/2025/32495" target="_blank" rel="noopener">ICLR 2025</a>).</li>
+<li>UnrealZoo already offers <strong>100+ photoreal Unreal worlds with a Gym API</strong>, and finds that environment diversity improves RL generalization (<a href="https://arxiv.org/abs/2412.20977" target="_blank" rel="noopener">arXiv 2412.20977</a>).</li>
+</ul>
+<p><strong>Game benchmarks for VLM and LLM agents</strong> check win/loss or game flags. They show frontier models remain weak at real-time, visually grounded play. VideoGameBench added a "Lite" mode that pauses the game while the model thinks, because inference latency crippled real-time play (<a href="https://arxiv.org/abs/2505.18134" target="_blank" rel="noopener">arXiv 2505.18134</a>).</p>
+<p>Scaffolding is the dominant confound. On ARC-AGI-3, one model scored 0% without a harness and 97.1% with a handcrafted one on one environment, yet 0% under both conditions on another. ARC Prize therefore bans domain-specific harnesses from its official board (<a href="https://arcprize.org/media/ARC_AGI_3_Technical_Report.pdf" target="_blank" rel="noopener">ARC-AGI-3 Technical Report</a>). Self-reported harness scores of 95–100% on the public set remain unverified (<a href="https://schema-harness.github.io/" target="_blank" rel="noopener">schema-harness</a>; <a href="https://arxiv.org/pdf/2607.28287" target="_blank" rel="noopener">arXiv 2607.28287</a>). A separate line of work has coding agents <em>write</em> game-playing programs instead of acting frame by frame (<a href="https://arxiv.org/pdf/2609.18996" target="_blank" rel="noopener">arXiv 2609.18996</a>). An environment product has to declare whether it measures the raw model or the model plus its harness.</p>
+<p>The technical requirements follow from how buyers judge environments. <strong>Reward hacking is buyers' top concern.</strong> Models have searched online for solutions and checked out future commits in SWE-bench repos, and robust graders take many iterations (<a href="https://epoch.ai/gradient-updates/state-of-rl-envs" target="_blank" rel="noopener">Epoch AI</a>). METR found o3 reward-hacking in every trajectory on one RE-Bench task (<a href="https://metr.org/blog/2025-06-05-recent-reward-hacking" target="_blank" rel="noopener">METR</a>). For a UE5 world this implies several design rules:</p>
+<ul>
+<li>Compute rewards in a separate process, from authoritative engine state: actor transforms, gameplay tags, inventory and trigger volumes. Never use anything the agent can write.</li>
+<li>Log full state traces for audit.</li>
+<li>Randomize answer-relevant variables per seed.</li>
+<li>Run lockstep, fixed-timestep stepping with a pause-on-think mode.</li>
+<li>Verify at the level of task state, not pixel equality, because physics is generally not bit-deterministic across hardware. This last point comes from engineering practice, not a cited source.</li>
+<li>Treat VLM judges as a secondary signal only. MineDojo's learned video-text reward shows where open-ended judging leads (<a href="https://arxiv.org/abs/2206.08853" target="_blank" rel="noopener">arXiv 2206.08853</a>).</li>
+</ul>
+<p>Per-step model inference costs seconds, and Mechanize estimates about <strong>$2,400 of RL compute per task</strong>. Either dwarfs the cost of rendering a frame, so photorealism is affordable for frontier-VLM agents. It is not affordable for million-step small-policy RL, where ManiSkill and Isaac's tiled rendering win.</p>
+<p><strong>Licensing is the biggest UE5-specific risk.</strong> Epic's EULA currently restricts using Unreal and MetaHuman <em>outputs</em> as AI training data. On October 27, 2026, Tim Sweeney said Epic is "working to remove this restriction," but gave no timeline (<a href="https://www.gamedeveloper.com/programming/epic-is-updating-the-eula-to-allow-ai-training-on-outputs-from-unreal-engine-and-metahuman" target="_blank" rel="noopener">Game Developer</a>). A separate clause bars MetaHuman characters from building training databases (<a href="https://conductatlas.com/platform/unreal-engine/unreal-engine-eula/provision/CA-P-059499/prohibition-on-using-metahuman-for-ai-database-building/" target="_blank" rel="noopener">ConductAtlas</a>). Unity's July 2026 terms reportedly require prior authorization to train on Unity-derived data (<a href="https://conductatlas.com/change/2026-07-01-unity-unity-terms-of-service-3395/" target="_blank" rel="noopener">ConductAtlas</a>). Seat cost is trivial at $1,850 per seat per year (<a href="https://www.unrealengine.com/en-US/blog/we-are-updating-unreal-engine-twinmotion-and-realitycapture-pricing-in-late-april" target="_blank" rel="noopener">Epic</a>). The restriction is the problem, not the price.</p>
+<p>The market for 3D environments is real but mostly elsewhere. 3D and simulation capital is flowing to robotics simulation and world models:</p>
+<ul>
+<li>Machenta raised $40M (<a href="https://news.lavx.hu/article/machenta-raises-40-million-to-train-robots-in-virtual-worlds" target="_blank" rel="noopener">LAVX</a>).</li>
+<li>Meshy raised $400M and Decart $300M (<a href="https://news.crunchbase.com/venture/2026-global-gaming-startup-funding-up-ai-meshy-decart/" target="_blank" rel="noopener">Crunchbase News</a>).</li>
+<li>World Labs and AMI Labs reportedly raised about $1B each (<a href="https://capitalandcompute.net/blog/world-model-funding-wave-2026/" target="_blank" rel="noopener">Capital &amp; Compute</a>).</li>
+</ul>
+<p>NVIDIA's open-source Isaac Lab-Arena, with 250+ contributed tasks from Lightwheel, is commoditizing simulated robot-policy evaluation (<a href="https://developer.nvidia.com/blog/simplify-generalist-robot-policy-evaluation-in-simulation-with-nvidia-isaac-lab-arena" target="_blank" rel="noopener">NVIDIA</a>). Google DeepMind trains SIMA 2 in commercial games and in its own Genie 3 worlds. Genie 3 runs at 720p and 24fps, stays consistent for several minutes and has about one minute of visual memory (<a href="https://deepmind.google/discover/blog/genie-3-a-new-frontier-for-world-models/" target="_blank" rel="noopener">DeepMind</a>). Hassabis describes a loop in which "whatever SIMA is trying to learn, Genie can generate on the fly" (<a href="https://www.humanoidsdaily.com/news/deepmind-ceo-demis-hassabis-world-models-and-infinite-training-loops-are-the-keys-to-agi" target="_blank" rel="noopener">Humanoids Daily</a>).</p>
+<p>The researchers found <strong>no funded startup selling UE5 or Unity environments to frontier labs for VLM agents</strong>. That is either white space or weak demand, and the evidence cannot tell which. Generative world models threaten the "diverse worlds" pitch but not the "verifiable reward" pitch: a pixel-generated world has no ground-truth state, so every judgment falls back to a hackable VLM judge. They also open a second product, using engine-rendered ground truth to evaluate world models for physical and 3D consistency.</p>
+<h2>Labs buy verifiable RL task families, mostly for training</h2>
+<p>The demand evidence points one way. Anthropic's Vision-team role makes the purchase explicit. Its responsibilities include owning "the data strategy for vision capabilities end-to-end, from building evals and scaling RL environments", managing external data vendors, "writing task specifications", building QA for reward hacking, and running "generalization experiments to measure how data strategy changes improve multimodal capabilities". The salary range is $350k–$850k (<a href="https://job-boards.greenhouse.io/anthropic/jobs/5074217008" target="_blank" rel="noopener">Anthropic Greenhouse</a>). Anthropic also hires capability-specific environment engineers, for example in cybersecurity RL. That suggests environment procurement is organized by vertical (<a href="https://job-boards.greenhouse.io/anthropic/jobs/5412334008" target="_blank" rel="noopener">Anthropic Greenhouse</a>).</p>
+<p>Epoch's interviews with 18 practitioners give the buying criteria. RL is the main use, with one startup estimating <strong>10–20x more RL requests than benchmarking requests</strong>. Buyers want a pass-rate floor of about 2–3%, meaning at least one success in 64–128 rollouts. They prefer a difficulty mix around 0%, 5% and 30%, and retire tasks near 70%. Demand is growing for long-horizon, multi-turn and enterprise workflows. "Maintaining quality while scaling is the number one bottleneck," and labs report "substantially more in-housing" to avoid vendor margins and keep priorities secret (<a href="https://epoch.ai/gradient-updates/state-of-rl-envs" target="_blank" rel="noopener">Epoch AI</a>).</p>
+<p>Epoch's survey of environment demand does not mention multimodal or 3D environments at all. Vision demand is real but nascent, documented in hiring rather than in disclosed spend.</p>
+<p>Adjacent buyers are weaker. World-model companies are more likely competitors or suppliers than customers. Robotics evaluation is moving toward independent auditors, such as Robocurve's $10M seed as a public-benefit corporation (<a href="https://robocurve.org/blog/seed-raise/" target="_blank" rel="noopener">Robocurve</a>), and toward free NVIDIA tooling. Neither looks like a reliable first revenue line for a vision-reasoning startup.</p>
+<h2>VisionBench's opening: procedural visual RL tasks on a 2D-to-3D ladder</h2>
+<h3>The gap</h3>
+<p>The gap is specific. The RL-environment vendor landscape is crowded with text, tool and GUI players:</p>
+<ul>
+<li>Halluminate: $30M Series A, claiming 4 of 5 leading US closed labs as customers.</li>
+<li>AfterQuery: $30.5M raised.</li>
+<li>HUD: $16M Series A.</li>
+<li>Fleet: $15M.</li>
+<li>Collinear, Chakra, Matrices and Plato.</li>
+</ul>
+<p>None of them is positioned around visual reasoning as a training product (<a href="https://www.rl-list.com/rl-environments-for-computer-use" target="_blank" rel="noopener">RL List</a>). The nearest neighbours are partial:</p>
+<ul>
+<li>Scale's VisualToolBench and HSS, which are benchmarks from a vendor with neutrality baggage;</li>
+<li>ARC Prize, a nonprofit with no commercial eval revenue;</li>
+<li>Refresh's BlenderBench, Andon Labs and BenchFlow in embodied niches;</li>
+<li>Patronus's pivot to simulated worlds for agents.</li>
+</ul>
+<p>The large gaps are in non-verbalizable perception, state over time, multi-view and metric spatial reasoning, and long chains. Those are the hardest gaps to fill with human-written question–answer pairs and the easiest to fill with generators and simulators that hold exact state.</p>
+<h3>The wedge</h3>
+<p>The wedge is <strong>difficulty-calibrated, state-verified visual RL task families</strong>, sold to lab vision teams in the vocabulary of the Anthropic posting: task families, verifiers, pass-rate calibration, hack resistance and generalization lift. A public, audited benchmark serves as the calling card. VisionBench already has the core assets:</p>
+<ul>
+<li>15 seeded generators with computed keys and difficulty knobs;</li>
+<li>an HMAC-seeded private split that can be rotated;</li>
+<li>render seeds that vary appearance while keeping the answer;</li>
+<li>blind and caption controls, a cross-vendor defect audit and clustered statistics.</li>
+</ul>
+<p>The first run also pins down what to build next. Search, tracking and rule induction separate models at 27–65%, while five families are saturated and need L6+ levels. The pass-rate band that labs ask for (2–70%) can be set directly by generator parameters rather than by filtering against particular models.</p>
+<p>Two pieces of evidence favour answers that are not plain text. BabyVision found RLVR gains only in verbalizable subtypes, and HSS failures are overwhelmingly perceptual. Families whose answers are spatial (coordinates, paths, masks, actions checked against simulator state) are therefore more likely to train real visual skill than another text-answer quiz. That is a testable hypothesis, and testing it should be the company's first research result.</p>
+<h3>The moat</h3>
+<p>The moat is a generator-and-verifier library that keeps refreshing and resists hacking. Behind it sit:</p>
+<ul>
+<li>human-baseline data on the same tasks;</li>
+<li>an audit trail that meets Epoch's reviewability bar;</li>
+<li>the switching costs of integration into lab RL stacks.</li>
+</ul>
+<p>The margin argument is structural. VisionBench ran 1,771 scored attempts for $13.40 in inference. Its items have near-zero marginal authoring cost, against about $2,500 per expert-authored Mercor task and 60–70% contractor pass-through at marketplaces. That puts it in the 80–90% gross-margin asset band rather than the roughly 30% labor band.</p>
+<p>The static public benchmark is the weakest moat. Two lessons from the run should shape the private sets. ARC showed that labs can train on a published generator's distribution, so private splits need <strong>mechanics that are out of distribution</strong>, not just new seeds. And Haiku's synthetic-versus-real divergence shows that generator families need external validity checks against real-image sets at larger n.</p>
+<h3>The risks</h3>
+<p>Five risks are concrete:</p>
+<ol>
+<li><strong>In-sourcing.</strong> Already reported, and strongest for anything a lab team can replicate in a quarter.</li>
+<li><strong>Buyer concentration.</strong> About 91% of Mercor's revenue comes from labs.</li>
+<li><strong>Incumbent entry.</strong> Mercor, Surge, Scale or Snorkel can add a vision vertical from existing contractor pools.</li>
+<li><strong>Fast saturation.</strong> ARC-AGI-3 moved from 0.4% to 62.7% in seven months.</li>
+<li><strong>Engine licensing and transfer.</strong> Epic's restriction is unlifted, and 3D game worlds may not transfer to what labs value.</li>
+</ol>
+<p>Neutrality is a sixth, subtler risk. Selling exclusive training families to one lab while running a "neutral" leaderboard invites contamination accusations. Benchmark and training sets must be kept separate, and the policy disclosed.</p>
+<h3>A 12–18 month plan</h3>
+<table>
+<thead>
+<tr>
+<th>Window</th>
+<th>Build</th>
+<th>Proof point</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Months 0–3</td>
+<td>Ship v2 fixes: numeric centre-of-mass for <code>block_stability</code>, L6+ for saturated families, a cross-family critic. Run the human baseline (<code>visionbench human-form</code>). Generate a ~3,000-item private split. Expand real-image tracks to n≥200. Publish with full harness metadata and defect logs. Package as Inspect- or <code>verifiers</code>-compatible environments. Open written inquiries with Epic.</td>
+<td>Public, audited benchmark run on 5+ models from 4+ vendors. At least one frontier-lab researcher running it. An Epoch-style "reviewable" release.</td>
+</tr>
+<tr>
+<td>Months 3–6</td>
+<td>Convert generators into RL task families with pass-rate calibration to the 2–70% band. Add hack probes (random-agent, known-exploit, answer-leak checks). Add long-chain families scored on full-episode success, plus video/stateful families: counting through occlusion, identity persistence, periodic events.</td>
+<td><strong>Measured training lift</strong> on an open VLM (Qwen-VL class), with transfer to independent sets (HSS image subset, BabyVision, VisuLogic, MMSI, VTB). This is the result the Anthropic role exists to evaluate.</td>
+</tr>
+<tr>
+<td>Months 6–12</td>
+<td>Sell 1–2 paid pilots to lab vision teams, neolabs or open-weight labs, at low six figures per quarter, with one family offered exclusively at a 4–5x premium. Build interactive 2D/2.5D worlds (ARC-AGI-3-style puzzles, spatial manipulation, visually dense apps such as CAD and maps) on an engine without AI-training restrictions.</td>
+<td>Signed pilot and a renewal. Gross margin reported against marketplace benchmarks.</td>
+</tr>
+<tr>
+<td>Months 12–18</td>
+<td>Move into 3D: lockstep, state-graded worlds. Use UE5 only if Epic's EULA change is in force (Godot, Blender or MuJoCo otherwise). Make photoreal variants of proven families. Pilot world-model consistency evals using engine ground truth.</td>
+<td>A benchmark cited in a frontier model card. A second paying lab. A 3D family showing transfer to real-image spatial benchmarks.</td>
+</tr>
+</tbody>
+</table>
+<h2>Conclusion</h2>
+<p>The research changes what VisionBench should think of itself as. It is not a leaderboard company that might later build environments. It is a <strong>visual-environment company whose benchmark is marketing and quality assurance</strong>. The money, the buyer persona and the margin structure all point to verifiable task families. The run's most useful finding is not the ranking. It is that the same machinery that produces training tasks also audits them. Programmatic keys, blind controls and cross-vendor consensus caught five real defects in 150 items before any customer saw them, which is exactly the quality-at-scale problem that labs call their number one bottleneck.</p>
+<p>The strategic bet that remains open is transfer. Two things are unknown: whether procedurally generated visual tasks train skills that show up on independent real-world benchmarks, and whether 3D game worlds train anything labs value beyond what Genie-class generators and GUI environments already supply. The evidence cannot settle either question, and Haiku's divergence between synthetic and real images is a warning. A training-lift experiment on an open model costs weeks, not quarters. It would show whether this is a large business or a niche benchmark, and it should come before any Unreal Engine 5 investment, which Epic's licensing currently makes premature anyway.</p></main></body></html>
