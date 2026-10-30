@@ -12,3 +12,4 @@ runs/
 datasets/*
 !datasets/.gitkeep
 previews/
+*.egg-info/
