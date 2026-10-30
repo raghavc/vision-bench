@@ -179,6 +179,9 @@ DESCRIPTIONS = {
     "mirror_lr": "complete left-right symmetry from the left half", "crop_bbox": "crop to the objects",
     "scale2": "scale up 2x",
 }
+DESCRIPTIONS.update({f"fill_enclosed_{c}": f"fill enclosed empty regions with colour {c}" for c in (2, 3, 4, 6, 8)})
+DESCRIPTIONS.update({f"rays_{d}": f"each single isolated pixel extends a ray {d} until blocked"
+                     for d in ("right", "left", "down", "up")})
 
 #              d1 d2 d3 d4 d5
 DEPTH =     [0, 1, 1, 2, 2, 3]

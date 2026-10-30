@@ -99,6 +99,31 @@ The verifiers are applied in order of trust:
 4. **Process judge** (optional): on failures, compares the model's visible reasoning with the generator's ground-truth facts and labels the first error as `perception`, `reasoning`, `instruction_following` or `incomplete`. This gives a perception-vs-reasoning breakdown.
 5. **Judge audit** (`visionbench judge-audit`): runs the equivalence judge on a balanced sample of programmatically verified attempts and reports accuracy, Cohen's κ, sensitivity, specificity and false-accept rate.
 
+6. **Reasoning critique** (`visionbench critique <run>`): grades *how* each agent reasoned, for correct and incorrect attempts alike.
+   - **Key facts:** every family turns its generator's facts into a numbered list of decisive facts. Examples: the chain of gears from the driver to the target and each link's type; the voided receipt lines and category totals; the true time on the mirrored clock; the shortest path and its edges.
+   - **What the critic does:** it sees those facts, the image and the agent's visible work (stated observations, a reasoning summary, tool calls). It returns:
+     - every image claim the agent made, labeled correct, incorrect or unverifiable;
+     - the status of each key fact: stated correctly, stated incorrectly, or not mentioned;
+     - whether each step is valid, and whether the answer follows from the reasoning;
+     - the first error, from a 12-type taxonomy (misread, omission, hallucination, attribute binding, spatial transform, tracking, counting, arithmetic, rule misapplication, instruction misread, premature commitment, gave up);
+     - the agent's strategy, whether it self-verified, and its efficiency;
+     - a written critique with strengths and weaknesses.
+   - **Derived metrics (per agent and per family):**
+     - **key-fact recall** and **key-fact misread rate** (perception);
+     - **claim precision** (hallucination);
+     - **valid-reasoning rate**;
+     - **sound success**: correct *and* supported by valid reasoning;
+     - **unsupported success**: correct answers that were guessed or reached through wrong steps;
+     - **failure locus**: perception vs reasoning vs instruction vs no answer;
+     - strategy mix, and accuracy with vs without self-verification.
+
+     Head-to-head tables show *why* the loser failed on the items where two agents disagree.
+   - **Agentic evidence grounding:** for agentic runs, crop boxes are compared deterministically with gold evidence boxes, giving the share of the evidence the agent actually inspected.
+   - **Reliability of the critic:** `visionbench critique-audit` re-runs the critic on the same attempts and reports test-retest agreement for each judgment. Critique metrics should be read with that agreement in mind.
+   - **Limitations:**
+     - Claude models return a *summary* of their private reasoning, not the raw chain of thought, so the critique covers visible reasoning only.
+     - When Claude critiques Claude there is a risk of self-preference. Grounding every judgment in generator facts reduces it. A judge from a different model family should be added when one is available.
+
 ## 4. Statistics
 
 - **Unit of analysis.** The item: samples are averaged within an item first. Clusters are latent problems (re-renders) for procedural families and source items for external sets.

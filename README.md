@@ -30,7 +30,10 @@ visionbench run dev-small --models claude-opus-5-5,claude-sonnet-5-5 \
     --samples 3 --conditions vision,blind,caption       # collect -> verify -> report
 visionbench run dev-small --models claude-opus-5-5 --mode agentic   # tool-use track
 
-visionbench verify <run> --process-judge   # perception-vs-reasoning error attribution
+visionbench critique <run>                 # grade HOW each agent reasoned: key-fact recall, misreads, valid steps,
+                                           #   strategy, self-verification, right-for-wrong-reason, head-to-head
+visionbench critique-audit <run>           # test-retest reliability of that critic
+visionbench verify <run> --process-judge   # quick perception-vs-reasoning label on failures only
 visionbench judge-audit <run>              # how trustworthy is the LLM judge?
 open runs/<run>/report.html
 ```

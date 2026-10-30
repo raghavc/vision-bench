@@ -74,3 +74,45 @@ async def judge_audit(run_dir: Path, settings: Settings, n: int = 150, seed: int
             "false_accept_rate": fp / max(1, tn + fp),
             "judge_model": judges.model, "judge_usage": judges.usage.__dict__,
             "disagreements": disagreements}
+
+
+async def critique_consistency(run_dir: Path, settings: Settings, n: int = 40, seed: int = 0) -> dict[str, Any]:
+    """Re-run the reasoning critic on already-critiqued attempts and measure agreement with the first pass.
+
+    Reports agreement on the binary judgments, error type, strategy and per-key-fact status. Treat critique
+    metrics with less agreement than this as noise.
+    """
+    from visionbench.verifiers.reasoning import attempt_view
+    manifest = json.loads((run_dir / "manifest.json").read_text())
+    items = {}
+    for line in (Path(manifest["dataset"]) / "items.jsonl").read_text().splitlines():
+        it = TaskInstance.from_record(json.loads(line))
+        items[it.uid] = it
+    for it in items.values():
+        it.load_images(Path(manifest["dataset"]))
+    attempts = {Attempt.from_record(r).key: Attempt.from_record(r) for r in _jsonl(run_dir / "attempts.jsonl")}
+    crits = [c for c in _jsonl(run_dir / "critiques.jsonl") if "metrics" in c and c["attempt_key"] in attempts]
+    random.Random(seed).shuffle(crits)
+    crits = crits[:n]
+    judges = Judges(Claude(settings), settings)
+    gate = RateGate(int(settings.run.get("concurrency", 8)))
+
+    async def one(c):
+        a = attempts[c["attempt_key"]]
+        async with gate:
+            return c, await judges.critique(items[a.uid], c["key_facts"], attempt_view(a), c["outcome"] == "correct")
+
+    pairs = await asyncio.gather(*[one(c) for c in crits])
+    agree: dict[str, list[bool]] = {k: [] for k in ("reasoning_valid", "answer_supported", "self_verification",
+                                                     "error_type", "strategy", "key_fact_status")}
+    for c, j2 in pairs:
+        j1 = c["judge"]
+        if any(k.startswith("_") for k in j2):
+            continue
+        for k in ("reasoning_valid", "answer_supported", "self_verification", "error_type", "strategy"):
+            agree[k].append(j1.get(k) == j2.get(k))
+        s1 = {x["index"]: x["status"] for x in j1.get("key_facts", [])}
+        s2 = {x["index"]: x["status"] for x in j2.get("key_facts", [])}
+        agree["key_fact_status"] += [s1.get(i) == s2.get(i) for i in range(len(c["key_facts"]))]
+    return {"n": len(pairs), "agreement": {k: (sum(v) / len(v) if v else None) for k, v in agree.items()},
+            "judge_model": judges.model, "judge_usage": judges.usage.__dict__}

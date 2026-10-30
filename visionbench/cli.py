@@ -6,7 +6,7 @@
   visionbench import visulogic --limit 300     import a public benchmark as a dataset
   visionbench estimate core-dev --models ...   rough token/cost estimate before spending
   visionbench run core-dev --models claude-opus-5-5 --samples 3 --conditions vision,blind
-  visionbench verify <run>  /  report <run>  /  judge-audit <run>
+  visionbench verify <run>  /  critique <run>  /  report <run>  /  judge-audit <run>
   visionbench selftest                         oracle round-trip on every family (offline)
 """
 
@@ -100,6 +100,19 @@ def cmd_run(args, settings):
     print(f"[run] -> {run_dir}", file=sys.stderr)
     asyncio.run(run.collect())
     asyncio.run(run.verify())
+    if args.critique:
+        asyncio.run(run.critique())
+    _report(run_dir, settings)
+
+
+def cmd_critique(args, settings):
+    from visionbench.harness.runner import Run
+    run_dir = Path(args.run) if Path(args.run).exists() else settings.path("output_dir") / args.run
+    m = json.loads((run_dir / "manifest.json").read_text())
+    run = Run(settings, Path(m["dataset"]), run_dir, models=m["models"], mode=m["mode"], conditions=m["conditions"],
+              samples=m["samples"], families=m.get("families"))
+    asyncio.run(run.critique(all_samples=args.all_samples, limit=args.limit,
+                             models=args.models.split(",") if args.models else None))
     _report(run_dir, settings)
 
 
@@ -144,6 +157,14 @@ def cmd_judge_audit(args, settings):
     res = asyncio.run(judge_audit(run_dir, settings, n=args.n))
     print(json.dumps({k: v for k, v in res.items() if k != "disagreements"}, indent=1))
     (run_dir / "judge_audit.json").write_text(json.dumps(res, indent=1, default=str))
+
+
+def cmd_critique_audit(args, settings):
+    from visionbench.verifiers.audit import critique_consistency
+    run_dir = Path(args.run) if Path(args.run).exists() else settings.path("output_dir") / args.run
+    res = asyncio.run(critique_consistency(run_dir, settings, n=args.n))
+    print(json.dumps(res, indent=1))
+    (run_dir / "critique_consistency.json").write_text(json.dumps(res, indent=1))
 
 
 def cmd_estimate(args, settings):
@@ -247,6 +268,7 @@ def main(argv=None):
             p.add_argument("--concurrency", type=int, default=None)
             p.add_argument("--code-execution", action="store_true")
             p.add_argument("--process-judge", action="store_true")
+            p.add_argument("--critique", action="store_true", help="also run the reasoning critique (sample 0 per item)")
         p.set_defaults(fn=fn)
 
     p = sub.add_parser("verify")
@@ -254,6 +276,13 @@ def main(argv=None):
     p.add_argument("--reset", action="store_true", help="re-verify everything")
     p.add_argument("--process-judge", action="store_true")
     p.set_defaults(fn=cmd_verify)
+
+    p = sub.add_parser("critique", help="grade how each agent reasoned (key facts, validity, strategy)")
+    p.add_argument("run")
+    p.add_argument("--all-samples", action="store_true", help="critique every sample, not just sample 0")
+    p.add_argument("--limit", type=int, default=None)
+    p.add_argument("--models", default=None)
+    p.set_defaults(fn=cmd_critique)
 
     p = sub.add_parser("report")
     p.add_argument("run")
@@ -277,6 +306,11 @@ def main(argv=None):
     p.add_argument("run")
     p.add_argument("--dataset", default=None, help="needed if the run directory is new")
     p.set_defaults(fn=cmd_human_import)
+
+    p = sub.add_parser("critique-audit", help="test-retest agreement of the reasoning critic")
+    p.add_argument("run")
+    p.add_argument("--n", type=int, default=40)
+    p.set_defaults(fn=cmd_critique_audit)
 
     p = sub.add_parser("selftest")
     p.add_argument("--n", type=int, default=6)

@@ -59,6 +59,88 @@ PROCESS_SCHEMA = {
     "additionalProperties": False,
 }
 
+ERROR_TYPES = [
+    "none",
+    "perception_misread",      # saw something, but read it wrong (a value, label, colour, position)
+    "perception_omission",     # missed an element that mattered
+    "hallucination",           # described something that is not in the image
+    "attribute_binding",       # right attributes, attached to the wrong object
+    "spatial_transform",       # mental rotation / perspective / reflection error
+    "tracking",                # lost a line, path or connection while following it
+    "counting_enumeration",    # skipped or double-counted while enumerating
+    "arithmetic",              # computation error on correctly read values
+    "rule_misapplication",     # wrong rule/policy/law applied, or applied incorrectly
+    "instruction_misread",     # misunderstood what was asked or the answer format
+    "premature_commitment",    # stopped at a first guess without checking
+    "gave_up",                 # no real attempt / no final answer
+]
+STRATEGIES = ["systematic_enumeration", "decomposition", "direct_perception", "elimination",
+              "trial_and_error", "pattern_guess", "tool_driven_inspection", "unclear"]
+
+CRITIQUE_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "observations": {
+            "type": "array",
+            "description": "Every concrete claim the agent made about the image content",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "claim": {"type": "string"},
+                    "verdict": {"type": "string", "enum": ["correct", "incorrect", "unverifiable"]},
+                },
+                "required": ["claim", "verdict"],
+                "additionalProperties": False,
+            },
+        },
+        "key_facts": {
+            "type": "array",
+            "description": "One entry per numbered key fact, in order",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "index": {"type": "integer"},
+                    "status": {"type": "string", "enum": ["stated_correctly", "stated_incorrectly", "not_mentioned"]},
+                },
+                "required": ["index", "status"],
+                "additionalProperties": False,
+            },
+        },
+        "reasoning_valid": {"type": "boolean", "description": "Each step follows from the agent's own premises"},
+        "answer_supported": {"type": "boolean", "description": "The final answer follows from the reasoning shown"},
+        "first_error_step": {"type": "string", "description": "Quote/paraphrase of the first wrong step, or empty"},
+        "error_type": {"type": "string", "enum": ERROR_TYPES},
+        "strategy": {"type": "string", "enum": STRATEGIES},
+        "self_verification": {"type": "boolean", "description": "The agent explicitly re-checked its reading or result"},
+        "efficiency": {"type": "string", "enum": ["concise", "adequate", "redundant", "meandering"]},
+        "strengths": {"type": "string"},
+        "weaknesses": {"type": "string"},
+        "critique": {"type": "string", "description": "2-4 sentence expert critique of the reasoning approach"},
+    },
+    "required": ["observations", "key_facts", "reasoning_valid", "answer_supported", "first_error_step",
+                 "error_type", "strategy", "self_verification", "efficiency", "strengths", "weaknesses", "critique"],
+    "additionalProperties": False,
+}
+
+CRITIQUE_SYSTEM = (
+    "You are an expert evaluator of visual reasoning. You audit HOW an AI agent reasoned about an image, not only "
+    "whether its final answer was right. You are given the task, the image, numbered KEY FACTS computed by the "
+    "program that generated the task (these are ground truth), the correct answer, whether the agent's answer was "
+    "graded correct, and the agent's visible work: its stated observations, a summary of its private reasoning, "
+    "and any tool calls.\n\n"
+    "Do the following carefully:\n"
+    "1. List each concrete claim the agent made about the image and mark it correct / incorrect / unverifiable "
+    "against the key facts and the image. Do not invent claims it did not make.\n"
+    "2. For every key fact, decide whether the agent stated or clearly used it correctly, stated it incorrectly, "
+    "or never mentioned it. Silence is 'not_mentioned', not 'stated_correctly'.\n"
+    "3. Judge whether its reasoning is valid given its own premises, and whether the final answer actually follows "
+    "from that reasoning (a correct answer reached through wrong steps or a guess is NOT supported).\n"
+    "4. Classify the FIRST error (or 'none'), the overall strategy, whether it self-verified, and its efficiency.\n"
+    "5. Write a short, specific critique a researcher would find useful: what the agent did well, where its approach "
+    "broke down, and what a better approach would have done.\n"
+    "Be strict and evidence-based; cite specifics. Do not reward verbosity or confident tone."
+)
+
 RUBRIC_SYSTEM = (
     "You are a meticulous, impartial grader for a visual-reasoning benchmark. You judge exactly ONE rubric "
     "criterion against a candidate response. You are given reference facts produced by the program that generated "
@@ -167,6 +249,23 @@ class Judges:
             f"<model_reasoning_summary>\n{thinking[-12000:]}\n</model_reasoning_summary>\n"
             f"<model_response>\n{response[-8000:]}\n</model_response>")}]
         return await self._call(PROCESS_SYSTEM, content, PROCESS_SCHEMA)
+
+    # ---------------------------------------------------------- critique
+    async def critique(self, instance: TaskInstance, key_facts: list[str], attempt_view: dict[str, Any],
+                       graded_correct: bool) -> dict[str, Any]:
+        imgs = _image_blocks(instance, self.show_image, self.max_side)
+        kf = "\n".join(f"{i}. {f}" for i, f in enumerate(key_facts))
+        ref = json.dumps(instance.answer.value, default=str)
+        tools = attempt_view.get("tool_calls") or []
+        tool_txt = "\n".join(json.dumps(t, default=str)[:300] for t in tools[:40]) or "(none)"
+        content = imgs + [{"type": "text", "text": (
+            f"<task>\n{instance.prompt}\n</task>\n<key_facts>\n{kf}\n</key_facts>\n"
+            f"<correct_answer>{ref}</correct_answer>\n"
+            f"<agent_answer graded=\"{'correct' if graded_correct else 'incorrect'}\">{attempt_view.get('answer')}</agent_answer>\n"
+            f"<agent_reasoning_summary>\n{(attempt_view.get('thinking') or '(not available)')[-14000:]}\n</agent_reasoning_summary>\n"
+            f"<agent_visible_response>\n{(attempt_view.get('response') or '')[-8000:]}\n</agent_visible_response>\n"
+            f"<agent_tool_calls>\n{tool_txt}\n</agent_tool_calls>")}]
+        return await self._call(CRITIQUE_SYSTEM, content, CRITIQUE_SCHEMA)
 
 
 def b64(data: bytes) -> str:

@@ -26,8 +26,10 @@ from visionbench.harness.mock import mock_attempt
 from visionbench.llm import Claude, RateGate
 from visionbench.tasks import dataset as ds
 from visionbench.tasks.base import REGISTRY, load_all
+from visionbench.tasks.key_facts import crop_grounding, key_facts
 from visionbench.verifiers import answers
 from visionbench.verifiers.judge import Judges
+from visionbench.verifiers.reasoning import attempt_view, derive
 
 
 def _read_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -53,6 +55,7 @@ class Run:
         (run_dir / "ledger").mkdir(exist_ok=True)
         self.attempts_path = run_dir / "attempts.jsonl"
         self.verdicts_path = run_dir / "verdicts.jsonl"
+        self.critiques_path = run_dir / "critiques.jsonl"
         self._lock = asyncio.Lock()
         self._claude: Claude | None = None
 
@@ -214,3 +217,50 @@ class Run:
                 outcome, score, verifier = "correct", 1.0, "programmatic+equivalence_judge"
         return Verdict(attempt_key=a.key, uid=a.uid, outcome=outcome, score=score, partial=partial,
                        parsed=parsed, details=details, verifier=verifier)
+
+    # -------------------------------------------------------------- critique
+    async def critique(self, all_samples: bool = False, limit: int | None = None, progress: bool = True,
+                       models: list[str] | None = None) -> None:
+        """Reasoning critique of vision-condition attempts (sample 0 per item unless all_samples)."""
+        items = {it.uid: it for it in self.items()}
+        attempts = self.latest_attempts()
+        verdicts = {r["attempt_key"]: r for r in _read_jsonl(self.verdicts_path)}
+        have = {r["attempt_key"] for r in _read_jsonl(self.critiques_path)}
+        todo = [a for k, a in attempts.items()
+                if k in verdicts and k not in have and a.condition == "vision" and a.uid in items
+                and not a.model.startswith(("mock:", "human:")) and (all_samples or a.sample == 0)
+                and (models is None or a.model in models) and verdicts[k]["outcome"] != "error"]
+        todo.sort(key=lambda a: (a.model, a.family, a.uid))
+        if limit:
+            todo = todo[:limit]
+        judges = Judges(self.claude, self.settings)
+        gate = RateGate(int(self.settings.run.get("concurrency", 8)))
+        if progress:
+            print(f"[critique] {len(todo)} attempts to critique", file=sys.stderr)
+        done = 0
+
+        async def one(a: Attempt):
+            nonlocal done
+            inst = items[a.uid]
+            v = verdicts[a.key]
+            kf = key_facts(inst)
+            async with gate:
+                try:
+                    j = await judges.critique(inst, kf, attempt_view(a), v["outcome"] == "correct")
+                except anthropic.APIError as e:
+                    j = {"_error": str(e)[:300]}
+            rec = {"attempt_key": a.key, "uid": a.uid, "model": a.model, "mode": a.mode, "family": a.family,
+                   "difficulty": a.difficulty, "sample": a.sample, "outcome": v["outcome"], "key_facts": kf,
+                   "judge": j, "grounding": crop_grounding(a.trajectory, inst), "judge_model": judges.model}
+            if not any(k.startswith("_") for k in j):
+                rec["metrics"] = derive(j, len(kf), v["outcome"])
+            async with self._lock:
+                with open(self.critiques_path, "a") as f:
+                    f.write(json.dumps(rec, default=str) + "\n")
+                done += 1
+                if progress and (done % max(5, len(todo) // 20) == 0 or done == len(todo)):
+                    print(f"[critique] {done}/{len(todo)}", file=sys.stderr)
+
+        await asyncio.gather(*[one(a) for a in todo])
+        if progress:
+            print(f"[critique] judge usage: {judges.usage}", file=sys.stderr)

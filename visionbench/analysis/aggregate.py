@@ -145,6 +145,8 @@ def aggregate(run_dir: Path, settings: Settings) -> dict[str, Any]:
         [{"uid": u, "family": items[u].family, "blind_acc": m} for u, (m, _, _) in blind_item.items() if m >= 0.5],
         key=lambda d: -d["blind_acc"])[:50]
     out["families"] = sorted({r.family for r in rows})
+    from visionbench.analysis.reasoning_profile import profiles
+    out["reasoning"] = profiles(run_dir)
     out["item_table"] = _item_table(rows, items)
     return out
 
