@@ -110,14 +110,18 @@ class Usage:
     output_tokens: int = 0
     cache_read_tokens: int = 0
     cache_write_tokens: int = 0
+    cost_usd: float = 0.0          # provider-reported cost (OpenRouter); 0 means "compute from prices"
 
     def add(self, other: "Usage") -> None:
         self.input_tokens += other.input_tokens
         self.output_tokens += other.output_tokens
         self.cache_read_tokens += other.cache_read_tokens
         self.cache_write_tokens += other.cache_write_tokens
+        self.cost_usd += other.cost_usd
 
     def cost(self, price_in: float, price_out: float) -> float:
+        if self.cost_usd:
+            return self.cost_usd
         # Cache writes bill at 1.25x input, reads at 0.1x.
         billed_in = self.input_tokens + 1.25 * self.cache_write_tokens + 0.1 * self.cache_read_tokens
         return (billed_in * price_in + self.output_tokens * price_out) / 1e6

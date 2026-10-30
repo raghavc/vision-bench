@@ -10,6 +10,9 @@ dependencies = [
     "numpy>=1.26",
     "matplotlib>=3.8",
     "scipy>=1.11",
+    "openai>=1.40",         # OpenRouter (OpenAI-compatible) for cross-vendor subjects
+    "huggingface_hub>=0.24",
+    "pyarrow>=15",
 ]
 
 [project.optional-dependencies]

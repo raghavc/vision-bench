@@ -9,6 +9,15 @@ api_key = ""            # sk-ant-...
 max_retries = 4
 timeout_seconds = 900
 
+# ---------------------------------------------------------------------------
+# OpenRouter: evaluate any vendor's model with ids prefixed "or:",
+# e.g. models = ["or:google/gemini-4-argon", "or:anthropic/claude-haiku-5.5"]
+# ---------------------------------------------------------------------------
+[openrouter]
+api_key = ""            # sk-or-...
+budget_usd = 14.0       # hard stop: no new calls once provider-reported spend reaches this
+max_tokens = 16000      # per-call output cap (reasoning tokens count as output)
+
 [huggingface]
 token = ""              # hf_... only needed for gated sets (ZeroBench); accept their terms on the Hub first
 

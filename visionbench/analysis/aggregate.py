@@ -40,6 +40,8 @@ def build_rows(run_dir: Path, settings: Settings) -> tuple[list[stats.Row], dict
         v = verdicts.get(key)
         if v is None or a.uid not in items:
             continue
+        if v["outcome"] == "error":  # infrastructure failures (API/network) are retried, never scored
+            continue
         pin, pout = settings.price(a.model)
         rows.append(stats.Row(
             model=a.model, mode=a.mode, condition=a.condition, uid=a.uid, cluster=a.cluster, family=a.family,

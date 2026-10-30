@@ -23,7 +23,7 @@ from visionbench.config import Settings
 from visionbench.core.types import Attempt, TaskInstance, Verdict
 from visionbench.harness.agent import SubjectRunner
 from visionbench.harness.mock import mock_attempt
-from visionbench.llm import Claude, RateGate
+from visionbench.llm import BudgetExceeded, Claude, RateGate
 from visionbench.tasks import dataset as ds
 from visionbench.tasks.base import REGISTRY, load_all
 from visionbench.tasks.key_facts import crop_grounding, key_facts
@@ -110,9 +110,13 @@ class Run:
         if progress:
             print(f"[run] {total} attempts to collect ({len(done)} already done)", file=sys.stderr)
 
+        stop = {"budget": False}
+
         async def one(model, inst, cond, k):
             nonlocal finished
             async with gate:
+                if stop["budget"]:
+                    return
                 try:
                     if model.startswith("mock:"):
                         att = mock_attempt(inst, model, self.mode if cond == "vision" else "direct", cond, k)
@@ -120,6 +124,11 @@ class Run:
                         att = await runner.run_agentic(inst, model, k)
                     else:
                         att = await runner.run_direct(inst, model, cond, k)
+                except BudgetExceeded as e:
+                    if not stop["budget"]:
+                        print(f"[run] {e}; stopping. Completed attempts are saved; resume later.", file=sys.stderr)
+                    stop["budget"] = True
+                    return
                 except anthropic.APIStatusError as e:
                     att = Attempt(uid=inst.uid, family=inst.family, cluster=inst.cluster, difficulty=inst.difficulty,
                                   model=model, mode=self.mode if cond == "vision" else "direct", condition=cond,
