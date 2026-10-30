@@ -153,6 +153,25 @@ def cmd_estimate(args, settings):
                    args.conditions.split(","), args.mode))
 
 
+def cmd_human_form(args, settings):
+    from visionbench.human import make_form
+    root = _dataset_root(settings, args.dataset)
+    out = Path(args.out or f"human_form_{args.name}.html")
+    make_form(root, out, args.name, args.n, args.seed)
+    print(f"form -> {out}  (send it to the annotator; they click 'Download answers' when done)")
+
+
+def cmd_human_import(args, settings):
+    from visionbench.human import import_answers
+    run_dir = Path(args.run) if Path(args.run).exists() else settings.path("output_dir") / args.run
+    if (run_dir / "manifest.json").exists():
+        root = Path(json.loads((run_dir / "manifest.json").read_text())["dataset"])
+    else:
+        root = _dataset_root(settings, args.dataset)
+    n = import_answers(Path(args.answers), root, run_dir)
+    print(f"imported {n} human answers into {run_dir}; now run: visionbench verify {run_dir}")
+
+
 def cmd_selftest(args, settings):
     from visionbench.harness.mock import format_truth
     from visionbench.tasks.base import load_all
@@ -244,6 +263,20 @@ def main(argv=None):
     p.add_argument("run")
     p.add_argument("--n", type=int, default=150)
     p.set_defaults(fn=cmd_judge_audit)
+
+    p = sub.add_parser("human-form", help="HTML answer form for a human baseline")
+    p.add_argument("dataset")
+    p.add_argument("--name", required=True, help="annotator id")
+    p.add_argument("--n", type=int, default=75)
+    p.add_argument("--seed", type=int, default=0)
+    p.add_argument("--out", default=None)
+    p.set_defaults(fn=cmd_human_form)
+
+    p = sub.add_parser("human-import", help="add a human's answers to a run as subject human:<name>")
+    p.add_argument("answers")
+    p.add_argument("run")
+    p.add_argument("--dataset", default=None, help="needed if the run directory is new")
+    p.set_defaults(fn=cmd_human_import)
 
     p = sub.add_parser("selftest")
     p.add_argument("--n", type=int, default=6)

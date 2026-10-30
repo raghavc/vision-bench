@@ -63,3 +63,12 @@ visionbench/verifiers/         answer checkers, LLM judges, judge audit (Verifie
 visionbench/analysis/          statistics, aggregation, HTML report
 tests/                         determinism, oracle round-trip, verifiers, statistics, end-to-end
 ```
+
+### Human baseline
+
+```bash
+visionbench human-form dev-small --name alice --n 75     # self-contained HTML, stratified over family x level
+# annotator answers in the browser, clicks "Download answers", sends human_alice.json
+visionbench human-import human_alice.json <run>           # becomes subject human:alice in that run
+visionbench verify <run>                                  # humans now appear in the report next to models
+```
