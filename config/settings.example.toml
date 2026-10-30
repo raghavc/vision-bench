@@ -9,6 +9,9 @@ api_key = ""            # sk-ant-...
 max_retries = 4
 timeout_seconds = 900
 
+[huggingface]
+token = ""              # hf_... only needed for gated sets (ZeroBench); accept their terms on the Hub first
+
 # ---------------------------------------------------------------------------
 # Subjects: the models being evaluated.
 # ---------------------------------------------------------------------------
@@ -53,6 +56,9 @@ blind_control = true     # also run every item with the image withheld
 process_judge = false    # LLM error attribution (perception vs reasoning) on failures
 output_dir = "runs"
 dataset_dir = "datasets"
+# Secret for the private test split (`visionbench build NAME --split test`). Keep it out of git;
+# rotate it to mint a fresh, uncontaminated test set.
+private_seed_secret = ""
 
 # ---------------------------------------------------------------------------
 # Prices in USD per million tokens, for cost reporting.

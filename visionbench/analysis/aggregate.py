@@ -68,6 +68,11 @@ def aggregate(run_dir: Path, settings: Settings) -> dict[str, Any]:
         s["pass_k"] = stats.pass_k_table(vis)
         s["outcomes"] = dict(Counter(r.outcome for r in vis))
         s["by_family"] = {f: stats.summarize(_subset(vis, family=f)) for f in sorted({r.family for r in vis})}
+        for f, fs in s["by_family"].items():
+            chance = float(np.mean([items[u].facts.get("chance", 0.0) or 0.0
+                                    for u in {r.uid for r in vis if r.family == f}]))
+            fs["chance"] = chance
+            fs["chance_normalized"] = (fs["mean"] - chance) / (1 - chance) if chance < 1 else None
         s["by_difficulty"] = {str(d): stats.summarize(_subset(vis, difficulty=d))
                               for d in sorted({r.difficulty for r in vis})}
         s["by_family_difficulty"] = {

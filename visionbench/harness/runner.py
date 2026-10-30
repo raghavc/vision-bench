@@ -155,7 +155,8 @@ class Run:
         have = {r["attempt_key"] for r in _read_jsonl(self.verdicts_path)}
         todo = [a for k, a in attempts.items() if k not in have and a.uid in items]
         judges = None
-        needs_judge = any(items[a.uid].answer.kind == "rubric" for a in todo) or \
+        needs_judge = any(items[a.uid].answer.kind == "rubric" or items[a.uid].facts.get("lenient_equivalence")
+                          for a in todo) or \
             (process_judge if process_judge is not None else bool(self.settings.run.get("process_judge", False)))
         if needs_judge:
             try:
@@ -203,5 +204,13 @@ class Run:
             return Verdict(attempt_key=a.key, uid=a.uid, outcome="unparseable", score=0.0)
         fam = REGISTRY.get(inst.family)
         outcome, score, partial, parsed, details = answers.check(spec, a.raw_answer, fam, inst)
+        verifier = "programmatic"
+        if outcome != "correct" and inst.facts.get("lenient_equivalence") and judges is not None:
+            # external free-form answers: reference-guided equivalence check (e.g. "1/2" vs "0.5 m")
+            eq = await judges.equivalent(inst, a.final_text or a.raw_answer)
+            details["programmatic_outcome"] = outcome
+            details["equivalence"] = eq
+            if eq.get("equivalent") is True:
+                outcome, score, verifier = "correct", 1.0, "programmatic+equivalence_judge"
         return Verdict(attempt_key=a.key, uid=a.uid, outcome=outcome, score=score, partial=partial,
-                       parsed=parsed, details=details)
+                       parsed=parsed, details=details, verifier=verifier)
