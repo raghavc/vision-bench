@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+# secrets: your real settings file with the API key
+config/settings.toml
+.env
+# run artifacts (large); commit selected reports manually
+runs/
+datasets/
+!datasets/.gitkeep
+.preview/
