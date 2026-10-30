@@ -211,7 +211,7 @@ def render(results: dict[str, Any], out_path: Path, title: str = "VisionBench re
                     f"<meta name='viewport' content='width=device-width,initial-scale=1'><style>{css}</style></head>"
                     f"<body><div class='viz-root'>"]
     h.append(f"<h1>{esc(title)}</h1><p class='sub'>Verifiable visual reasoning · {results['n_rows']} scored attempts · "
-             f"{len(fams)} task families · run <code>{esc(results['run_dir'])}</code></p>")
+             f"{len(fams)} task families · run <code>{esc(Path(results['run_dir']).name)}</code></p>")
     if subs:
         best = max(subs, key=lambda s: s["accuracy"]["mean"])
         h.append("<div class='kpis'>")
